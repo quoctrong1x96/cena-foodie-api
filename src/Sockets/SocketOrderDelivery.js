@@ -9,8 +9,6 @@ export const socketOrderDelivery = (io) => {
 
         socket.on('position', (data) => {
 
-            // console.log(`DATA FLUTTER ${JSON.stringify(data)}`);
-
             nameSpaceOrders.emit(`position/${data.idOrder}`, { latitude: data.latitude, longitude: data.longitude });
             
         });

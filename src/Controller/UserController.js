@@ -234,12 +234,8 @@ export const getAddressById = async (req, res = response) => {
 
         const addressId = req.header('id');
 
-        console.log(addressId);
-
         const addressdb = await pool.query('SELECT * FROM addresses WHERE id = ? ORDER BY id DESC LIMIT 1', [ addressId]);
-        
-        console.log(addressdb[0]);
-
+    
         if( addressdb[0].id){
             res.json({
                 resp: true,
