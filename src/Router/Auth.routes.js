@@ -6,6 +6,7 @@ const router = Router();
 
 
 router.post('/login-email-id', login.loginController);
+router.post('/login-phone-id', login.loginWithPhoneController);
 router.get('/renew-token-login', verifyToken ,login.renewTokenLogin);
 
 

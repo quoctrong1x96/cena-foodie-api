@@ -13,6 +13,15 @@ export const registerClient = async ( req, res = response ) => {
         let salt = bcrypt.genSaltSync();
         const pass = bcrypt.hashSync( password, salt );
 
+        const validatedPhone = await pool.query('SELECT phone FROM person WHERE phone = ?', [phone]);
+
+        if( validatedPhone.length  > 0 ){
+            return res.status(401).json({
+                resp: false,
+                msg : 'Phone already exists'
+            });
+        }
+
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
 
         if( validatedEmail.length  > 0 ){

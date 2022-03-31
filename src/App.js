@@ -20,7 +20,8 @@ const app = express();
 
 // CONFIG SOCKET 
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+
+const io = new Server(httpServer, {/* */});
 socketOrderDelivery(io);
 
 
