@@ -6,7 +6,7 @@ export const addNewOrders = async (req, res = response ) => {
 
     try {
 
-        const { uidAddress, total, typePayment,  products } = req.body;
+        const { uidAddress, total, typePayment, products } = req.body;
 
         const orderdb = await pool.query('INSERT INTO orders (client_id, address_id, amount, pay_type) VALUES (?,?,?,?)', [ req.uid, uidAddress, total, typePayment ]);
 
@@ -16,7 +16,8 @@ export const addNewOrders = async (req, res = response ) => {
 
         res.json({
             resp: true,
-            msg : 'New Order added successfully'
+            msg : 'New Order added successfully',
+            orderId: orderdb.insertId
         });
 
     } catch (e) {
@@ -74,9 +75,9 @@ export const updateStatusToDispatched = async ( req, res = response ) => {
 
     try {
 
-        const { idDelivery, idOrder } = req.body;
+        const { idDelivery, idOrder, store_id, store_latitude, sotre_longitude } = req.body;
 
-        await pool.query('UPDATE orders SET status = ?, delivery_id = ? WHERE id = ?', [ 'DISPATCHED', idDelivery, idOrder ]);
+        await pool.query('UPDATE orders SET status = ?, delivery_id = ?, store_id = ?, store_latitude = ?, store_longitude = ? WHERE id = ?', [ 'DISPATCHED', idDelivery,store_id,  store_latitude, sotre_longitude,idOrder , ]);
 
         res.json({
             resp: true,

@@ -125,7 +125,7 @@ export const listProductsAdmin = async (req, res = response) => {
 
     try {
 
-        const productsdb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN();`);
+        const productsdb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN(?);`, req.uid);
 
         res.json({
             resp: true,
