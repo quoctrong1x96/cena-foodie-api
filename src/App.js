@@ -12,6 +12,7 @@ import routerProduct from './Router/Product.routes';
 import routerCategory from './Router/Category.routes';
 import routerOrder from './Router/Order.routes';
 import routerStore from './Router/Store.routes';
+import routerVocher from './Router/Vocher.routes';
 
 
 config();
@@ -34,6 +35,7 @@ app.use('/api', routerProduct);
 app.use('/api', routerCategory);
 app.use('/api', routerOrder);
 app.use('/api', routerStore);
+app.use('/api/vocher', routerVocher);
 
 
 app.use( express.static( path.join( __dirname, 'Uploads/Profile' )));

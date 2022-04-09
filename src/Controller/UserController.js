@@ -211,8 +211,7 @@ export const addStreetAddress = async ( req, res = response ) => {
 export const getAddressOne = async (req, res = response) => {
 
     try {
-
-        const addressdb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [ req.uid ]);
+                const addressdb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [ req.uid ]);
         
         res.json({
             resp: true,
@@ -276,14 +275,15 @@ export const updateNotificationToken = async (req, res = response ) => {
 export const getAdminNotificationToken = async (req, res = response ) => {
 
     try {
+        const store_id =req.header('store_id');
 
-        const admisdb = await pool.query('SELECT notification_token FROM users WHERE rol_id = 1');
+        const notification_tokens = await pool.query(`CALL SP_GET_STORE_NOTIFICATION_TOKEN(?);`, [store_id]);
 
+        const notification_token = notification_tokens[0][0];
+         
         let tokens = [];
 
-        admisdb.forEach( t  => {
-            tokens.push(t.notification_token);
-        });
+        tokens.push(notification_token);
 
         res.json(tokens);
         

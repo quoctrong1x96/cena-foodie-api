@@ -159,7 +159,7 @@ export const renewTokenLogin = async (req, res = response) => {
 
         let store = null;
         try {
-            store = storedb[0];
+            store = storedb[0][0];
         } catch (e) {
             store = null;
         }
