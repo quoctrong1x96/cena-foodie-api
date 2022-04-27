@@ -47,6 +47,7 @@ export const loginController = async (req, res = response) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 image: user.image,
+                phone: user.phone,
                 email: user.email,
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
@@ -115,6 +116,7 @@ export const loginWithPhoneController = async (req, res = response) => {
                 lastName: user.lastName,
                 image: user.image,
                 email: user.email,
+                phone: user.phone,
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
