@@ -41,7 +41,7 @@ export const getDashboardByStatus = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Get dashboard by Status filter with '+ typeFunction,
-            dashboardByStatus: listdb[0][0]
+            dashboardByStatus: listdb[0][0]==null?[]:listdb[0][0]
         });
 
     } catch (e) {
@@ -86,7 +86,7 @@ export const getDashboardByPaytype = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Get dashboard by Payment Type filter with '+ typeFunction,
-            dashboardByPayment: listdb[0][0]
+            dashboardByPayment: listdb[0][0]==null?[]:listdb[0][0]
         });
 
     } catch (e) {
@@ -132,7 +132,7 @@ export const getDashboardByDelivered = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Get dashboard by Delivered filter with '+ typeFunction,
-            dashboardByDelivered: listdb[0]
+            dashboardByDelivered: listdb[0]==null?[]:listdb[0]
         });
 
     } catch (e) {
@@ -177,7 +177,7 @@ export const getDashboardByProduct = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Get dashboard by Product filter with '+ typeFunction,
-            dashboardByProduct: listdb[0]
+            dashboardByProduct: listdb[0]==null?[]:listdb[0]
         });
 
     } catch (e) {
@@ -222,7 +222,7 @@ export const getDashboardByPersonal = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Get dashboard by Personal filter with '+ typeFunction,
-            dashboardByPersonal: listdb[0]
+            dashboardByPersonal: listdb[0]==null?[]:listdb[0]
         });
 
     } catch (e) {
