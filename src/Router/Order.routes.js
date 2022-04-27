@@ -14,7 +14,7 @@ router.get('/get-all-orders-by-delivery/:statusOrder', verifyToken, orders.getOr
 router.put('/update-status-order-on-way/:idOrder', verifyToken, orders.updateStatusToOntheWay );
 router.put('/update-status-order-delivered/:idOrder', verifyToken, orders.updateStatusToDelivered );
 
-router.get('/get-list-orders-for-client', verifyToken, client.getListOrdersForClient);
+router.get('/get-list-orders-for-client:statusOrder', verifyToken, client.getListOrdersForClient);
 
 
 export default router;

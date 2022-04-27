@@ -22,6 +22,27 @@ export const addCategories = async (req, res = response) => {
     }
 }
 
+export const updateCategories = async (req, res = response) => {
+
+    try {
+
+        const { category, description, id } = req.body;
+
+        await pool.query(`CALL SP_UPDATE_CATEGORY(?,?,?);`, [ category, description, id ]);
+
+        res.json({
+            resp: true,
+            msg : 'Category update successfully',
+        });
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        }); 
+    }
+}
+
 export const getAllCategories = async ( req, res = response ) => {
 
     const store_id = req.header('store_id');

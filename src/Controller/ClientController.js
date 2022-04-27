@@ -6,11 +6,11 @@ export const getListOrdersForClient = async (req, res = response) => {
 
     try {
 
-        const listdb = await pool.query(`CALL SP_ORDERS_FOR_CLIENT(?);`, [req.uid]);
+        const listdb = await pool.query(`CALL SP_ORDERS_FOR_CLIENT(?,?);`, [req.uid, req.params.statusOrder]);
 
         res.json({
             resp: true,
-            msg : 'List orders for client',
+            msg : 'List orders for client by ' + req.params.statusOrder,
             ordersClient: listdb[0]
         });
         
