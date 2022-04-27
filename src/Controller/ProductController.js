@@ -28,6 +28,36 @@ export const addNewProduct = async (req, res = response) => {
 
 }
 
+export const updateProduct = async (req, res = response) => {
+
+    try {
+
+        const {product_id, name, description, price, category } = req.body;
+        
+        const rows = await pool.query('Update products set nameProduct = ? , description = ?, price = ?, category_id = ? where  id = ?', [name, description, price, category, product_id]);
+        
+        if(req.files && req.files.length> 0){
+            pool.query('DELETE imageProduct WHERE product_id = ?)', [ product_id]);
+            req.files.forEach(image => {
+                pool.query('INSERT INTO imageProduct (picture, product_id) value (?,?)', [ image.filename, rows.insertId ]);
+            });
+        }
+       
+
+        res.json({
+            resp: true,
+            msg : 'Product update Successfully'
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
 export const 
 getProductsTopHome = async (req, res = response) => {
 

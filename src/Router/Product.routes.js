@@ -8,6 +8,7 @@ const router = Router();
 
 
 router.post('/add-new-products', [ verifyToken, upLoadsProducts.array('image') ], product.addNewProduct);
+router.post('/update-products', [ verifyToken, upLoadsProducts.array('image') ], product.updateProduct);
 router.get('/get-products-top-home', verifyToken, product.getProductsTopHome);
 router.get('/get-images-products/:id', verifyToken, product.getImagesProducts );
 router.get('/search-product-for-name/:nameProduct', verifyToken, product.searchProductForName );
