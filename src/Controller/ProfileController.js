@@ -6,14 +6,13 @@ import pool from '../Database/mysql';
 export const updateLastname = async (req, res = response) => {
 
     try {
-        let lastName = req.header('lastname');
-        let userId = req.header('user_id');
+        const { lastname, user_id } = req.body;
 
-        const person = await pool.query(`CALL SP_PROFILE_UPDATE_LASTNAME(?,?);`,[userId,lastName]);
+        const person = await pool.query(`CALL SP_PROFILE_UPDATE_LASTNAME(?,?);`,[user_id,lastname]);
 
         res.json({
             resp: true,
-            msg : 'Update sussuses với lastname = '+ lastName,
+            msg : 'Update sussuses với lastname = '+ lastname,
             person: person[0] 
         });
 
@@ -30,14 +29,13 @@ export const updateLastname = async (req, res = response) => {
 export const updateFirstname = async (req, res = response) => {
 
     try {
-        let firstName = req.header('firstname');
-        let userId = req.header('user_id');
+        const { firstname, user_id } = req.body;
 
-        const person = await pool.query(`CALL SP_PROFILE_UPDATE_FIRSTNAME(?,?);`,[userId,firstName]);
+        const person = await pool.query(`CALL SP_PROFILE_UPDATE_FIRSTNAME(?,?);`,[user_id,firstname]);
 
         res.json({
             resp: true,
-            msg : 'Update sussuses với firstName = '+ firstName,
+            msg : 'Update sussuses với firstName = '+ firstname,
             person: person[0] 
         });
 
