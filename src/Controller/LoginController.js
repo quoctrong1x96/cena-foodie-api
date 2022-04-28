@@ -120,7 +120,7 @@ export const loginWithPhoneController = async (req, res = response) => {
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
-            store: {
+            store: store == null? null: {
                 id: store.id,
                 store_name: store.store_name,
                 address: store.address,
@@ -148,29 +148,30 @@ export const loginWithPhoneController = async (req, res = response) => {
 
 
 export const renewTokenLogin = async (req, res = response) => {
-
+    let error = 1;
     try {
-
+        
         const token = await generateJsonWebToken(req.uid);
-
+        error++;
         const userdb = await pool.query(`CALL SP_RENEWTOKENLOGIN(?);`, [req.uid]);
-
+        error++;
         const user = userdb[0][0];
-
+        error++;
         const storedb = await pool.query(`CALL SP_RENEWTOKENLOGIN_STORE(?);`, [req.uid]);
-
+        error++;
         let store = null;
         try {
             store = storedb[0][0];
         } catch (e) {
+            
             store = null;
         }
-
+        error++;
         res.json({
             resp: true,
             msg: 'Welcome to Cena Foodie',
             user: {
-                uid: user.uid,
+                uid: user.id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 image: user.image,
@@ -179,7 +180,7 @@ export const renewTokenLogin = async (req, res = response) => {
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
-            store: {
+            store: store == null? null :{
                 id: store.id,
                 store_name: store.store_name,
                 address: store.address,
@@ -197,7 +198,7 @@ export const renewTokenLogin = async (req, res = response) => {
     } catch (e) {
         res.status(500).json({
             resp: false,
-            msg: e
+            msg: "Lỗi tại "+ error,
         });
     }
 
