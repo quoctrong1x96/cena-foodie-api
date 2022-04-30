@@ -66,3 +66,25 @@ export const getAllCategories = async ( req, res = response ) => {
 
 }
 
+export const getCategoriesByStore = async ( req, res = response ) => {
+
+    try {
+
+        const category = await pool.query(`SELECT c.* FROM categories c INNER JOIN products p ON c.id = p.category_id
+        WHERE c.store_id = 1 OR c.store_id = ? GROUP BY c.id`, req.params.id);
+
+        res.json({
+            resp: true,
+            msg : 'Active categories of store '+ store_id,
+            categories: category
+        });
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+

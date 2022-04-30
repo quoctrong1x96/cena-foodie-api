@@ -10,5 +10,6 @@ router.post('/add-categories', verifyToken, category.addCategories);
 router.post('/update-categories', verifyToken, category.addCategories);
 router.get('/get-all-categories', verifyToken, category.getAllCategories );
 router.get('/get-all-delivery', verifyToken, getAllDelivery);
+router.get('/categories/:id', verifyToken, category.getCategoriesByStore);
 
 export default router;
