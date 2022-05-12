@@ -51,3 +51,29 @@ export const getStoresList = async (req, res = response) => {
     }
 
 }
+
+export const getStoresPerPage = async (req, res = response) => {
+
+    try {
+        let offset = req.header('offset');
+        let limit = req.header('limit');
+        let lng = req.header('lng');
+        let lat = req.header('lat');
+       
+        const stores = await pool.query(`CALL SP_GET_STORES_NEXT_LOCATION_BY_PAGE(?,?,?,?);`,[lat, lng, limit, offset]);
+
+        res.json({
+            resp: true,
+            msg : '10 stores near you by limit '+ limit + ', offset '+ offset,
+            stores: stores[0] 
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
