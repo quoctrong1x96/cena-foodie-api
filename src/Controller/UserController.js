@@ -11,24 +11,24 @@ export const getUserById = async (req, res = response) => {
         const uid = req.uid;
 
         const query = await pool.query(`CALL SP_USER_BY_ID(?);`, [uid]);
-        
+
         res.json({
             resp: true,
-            msg : 'Get profile',
+            msg: 'Get profile',
             user: query[0][0]
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
 
-export const editProfile = async ( req, res = response ) => {
+export const editProfile = async (req, res = response) => {
 
     try {
 
@@ -38,30 +38,30 @@ export const editProfile = async ( req, res = response ) => {
 
         res.json({
             resp: true,
-            msg : 'Updated Profile'
+            msg: 'Updated Profile'
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
 
-export const getUserUpdated = async ( req, res = response ) => {
+export const getUserUpdated = async (req, res = response) => {
 
     try {
 
-        const userdb = await pool.query(`CALL SP_USER_UPDATED(?);`, [ req.uid ]);
+        const userdb = await pool.query(`CALL SP_USER_UPDATED(?);`, [req.uid]);
 
         const user = userdb[0][0];
 
         res.json({
             resp: true,
-            msg : 'User updated',
+            msg: 'User updated',
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
@@ -70,18 +70,18 @@ export const getUserUpdated = async ( req, res = response ) => {
                 rol_id: user.rol_id
             },
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
 
-export const changePassword = async ( req, res = response ) => {
+export const changePassword = async (req, res = response) => {
 
     try {
 
@@ -89,27 +89,27 @@ export const changePassword = async ( req, res = response ) => {
 
         const passworddb = await pool.query('SELECT passwordd FROM users WHERE persona_id = ?', [req.uid]);
 
-        if( !await bcrypt.compareSync( currentPassword, passworddb[0].passwordd )){
+        if (!await bcrypt.compareSync(currentPassword, passworddb[0].passwordd)) {
             return res.status(401).json({
                 resp: false,
-                msg : 'Passwords do not match'
-            }); 
+                msg: 'Passwords do not match'
+            });
         }
 
         let salt = bcrypt.genSaltSync();
-        const pass = bcrypt.hashSync( newPassword, salt );
+        const pass = bcrypt.hashSync(newPassword, salt);
 
-        await pool.query('UPDATE users SET passwordd = ? WHERE persona_id = ?', [ pass, req.uid ]);
+        await pool.query('UPDATE users SET passwordd = ? WHERE persona_id = ?', [pass, req.uid]);
 
         res.json({
             resp: true,
             msg: 'Password Changed'
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
@@ -122,28 +122,28 @@ export const changeImageProfile = async (req, res = response) => {
 
         const imagePath = req.file.filename;
 
-        const imagedb = await pool.query('SELECT image FROM person WHERE uid = ?', [ req.uid ]);
-        
-        await fs.unlink( path.resolve('src/Uploads/Profile/'+imagedb[0].image));
+        const imagedb = await pool.query('SELECT image FROM person WHERE uid = ?', [req.uid]);
 
-        await pool.query('UPDATE person SET image = ? WHERE uid = ?', [ imagePath, req.uid ]);
+        await fs.unlink(path.resolve('src/Uploads/Profile/' + imagedb[0].image));
+
+        await pool.query('UPDATE person SET image = ? WHERE uid = ?', [imagePath, req.uid]);
 
         res.json({
             resp: true,
-            msg : 'Picture changed'
+            msg: 'Picture changed'
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
 
-export const getAddressesUser = async (req, res = response ) => {
+export const getAddressesUser = async (req, res = response) => {
 
     try {
 
@@ -151,57 +151,57 @@ export const getAddressesUser = async (req, res = response ) => {
 
         res.json({
             resp: true,
-            msg : 'List the Addresses',
-            listAddresses : addressesdb
+            msg: 'List the Addresses',
+            listAddresses: addressesdb
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
 
-export const deleteStreetAddress = async (req, res = response ) => {
+export const deleteStreetAddress = async (req, res = response) => {
 
     try {
 
-        await pool.query('DELETE FROM addresses WHERE id = ? AND persona_id = ?', [ req.params.idAddress , req.uid ]);
+        await pool.query('DELETE FROM addresses WHERE id = ? AND persona_id = ?', [req.params.idAddress, req.uid]);
 
         res.json({
             resp: true,
-            msg : 'Street Address deleted'
+            msg: 'Street Address deleted'
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 }
 
 
-export const addStreetAddress = async ( req, res = response ) => {
+export const addStreetAddress = async (req, res = response) => {
 
     try {
 
         const { type, reciever, phone, building, door, note, address, latitude, longitude } = req.body;
-        await pool.query('INSERT INTO addresses (typeId, reciever,phone, building, door,note,address,Latitude, Longitude, persona_id) VALUE (?,?,?,?,?,?,?,?,?,?)', 
-        [ type, reciever,phone, building, door, note, address, latitude, longitude, req.uid ]);
-        
+        await pool.query('INSERT INTO addresses (typeId, reciever,phone, building, door,note,address,Latitude, Longitude, persona_id) VALUE (?,?,?,?,?,?,?,?,?,?)',
+            [type, reciever, phone, building, door, note, address, latitude, longitude, req.uid]);
+
         res.json({
             resp: true,
-            msg : 'Address added successfully'
+            msg: 'Address added successfully'
         });
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
@@ -211,19 +211,19 @@ export const addStreetAddress = async ( req, res = response ) => {
 export const getAddressOne = async (req, res = response) => {
 
     try {
-                const addressdb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [ req.uid ]);
-        
+        const addressdb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [req.uid]);
+
         res.json({
             resp: true,
-            msg : 'One Address',
+            msg: 'One Address',
             address: addressdb[0]
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
-        }); 
+            msg: e
+        });
     }
 }
 
@@ -233,84 +233,110 @@ export const getAddressById = async (req, res = response) => {
 
         const addressId = req.header('id');
 
-        const addressdb = await pool.query('SELECT * FROM addresses WHERE id = ? ORDER BY id DESC LIMIT 1', [ addressId]);
-    
-        if( addressdb[0].id){
+        const addressdb = await pool.query('SELECT * FROM addresses WHERE id = ? ORDER BY id DESC LIMIT 1', [addressId]);
+
+        if (addressdb[0].id) {
             res.json({
                 resp: true,
-                msg : 'return Address',
+                msg: 'return Address',
                 address: addressdb[0]
             });
         }
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
-        }); 
+            msg: e
+        });
     }
 }
 
-export const updateNotificationToken = async (req, res = response ) => {
+export const updateNotificationToken = async (req, res = response) => {
 
     try {
 
         const { nToken } = req.body;
 
-        await pool.query('UPDATE users SET notification_token = ? WHERE persona_id = ?', [ nToken, req.uid ]);
+        await pool.query('UPDATE users SET notification_token = ? WHERE persona_id = ?', [nToken, req.uid]);
 
         res.json({
             resp: true,
-            msg : 'Token updated'
+            msg: 'Token updated'
         });
-        
+
     } catch (e) {
         return res.status(500).json({
-            resp : false,
-            msg : e
+            resp: false,
+            msg: e
         });
     }
 
 }
 
-export const getAdminNotificationToken = async (req, res = response ) => {
+export const getAdminNotificationToken = async (req, res = response) => {
 
     try {
-        const store_id =req.header('store_id');
+        const store_id = req.header('store_id');
 
         const notification_tokens = await pool.query(`CALL SP_GET_STORE_NOTIFICATION_TOKEN(?);`, [store_id]);
 
         const notification_token = notification_tokens[0][0];
-         
+
         let tokens = [];
 
         tokens.push(notification_token);
 
         res.json(tokens);
-        
+
     } catch (e) {
         return res.status(501).json({
             resp: false,
-            msg : e
+            msg: e
         });
     }
 
 }
 
-export const updateDeliveryToClient = async( req, res = response ) => {
+export const updateDeliveryToClient = async (req, res = response) => {
 
     try {
 
-        await pool.query('UPDATE users SET rol_id = ? WHERE persona_id = ?', [ 2, req.params.idPerson ]);
+        await pool.query('UPDATE users SET rol_id = ? WHERE persona_id = ?', [2, req.params.idPerson]);
 
         res.json({
             resp: true,
-            msg : 'Delivery To Client'
+            msg: 'Delivery To Client'
         });
-        
+
     } catch (e) {
         return res.status(501).json({
             resp: false,
-            msg : e
+            msg: e
+        });
+    }
+}
+export const enterReferenceCode = async (req, res = response) => {
+
+    try {
+        const {code } = req.body;
+        const message = await pool.query(`CALL SP_REFERENCE_ADD(?, ?);`, [req.uid, code]);
+        
+        if(message != 'successful'){
+            return res.json({
+                resp: false,
+                msg: message
+            });
+        }else{
+            return  res.json({
+                resp: true,
+                msg: message
+            });
+        }
+        
+
+    } catch (e) {
+        return res.status(501).json({
+            resp: false,
+            msg: e
         });
     }
 
