@@ -323,12 +323,12 @@ export const enterReferenceCode = async (req, res = response) => {
         if(message != 'successful'){
             return res.json({
                 resp: false,
-                msg: message[0][0]
+                msg: message[0][0]["message"]
             });
         }else{
             return  res.json({
                 resp: true,
-                msg: message[0][0]
+                msg: message[0][0]["message"]
             });
         }
         
