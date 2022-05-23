@@ -9,6 +9,7 @@ const router = Router();
 
 router.post('/register-client', upLoadsProfile.single('image'), register.registerClient );
 router.post('/register-delivery', [ verifyToken, upLoadsProfile.single('image') ], register.registerDelivery );
+router.post('/register/reference', verifyToken, user.enterReferenceCode)
 
 router.get('/get-user-by-id', verifyToken, user.getUserById);
 router.put('/edit-profile', verifyToken, user.editProfile);
