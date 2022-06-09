@@ -1,16 +1,17 @@
 import { Router } from 'express';
 
-import * as product from '../Controller/ProductController';
-import { upLoadsProducts } from '../Lib/Multer';
-import { verifyToken } from '../Middleware/ValidateToken';
+import * as product from '../../controller/productController.js';
+import { upLoadsProducts } from '../../lib/Multer.js';
+import { verifyToken } from '../../middleware/validateToken.js';
 
 const router = Router();
 
 
-router.post('/add-new-products', [ verifyToken, upLoadsProducts.array('image') ], product.addNewProduct);
-router.post('/update-products', [ verifyToken, upLoadsProducts.array('image') ], product.updateProduct);
+router.post('/products', [ verifyToken, upLoadsProducts.array('image') ], product.addNewProduct);
+router.put('/products/:idProduct', [ verifyToken, upLoadsProducts.array('image') ], product.updateProduct);
+router.get('/products/:idProduct/images', verifyToken, product.getImagesProducts );
+
 router.get('/get-products-top-home', verifyToken, product.getProductsTopHome);
-router.get('/get-images-products/:id', verifyToken, product.getImagesProducts );
 router.get('/search-product-for-name/:nameProduct', verifyToken, product.searchProductForName );
 router.get('/search-product-for-category/:idCategory', verifyToken, product.searchProductsForCategory );
 router.get('/list-porducts-admin', verifyToken, product.listProductsAdmin );

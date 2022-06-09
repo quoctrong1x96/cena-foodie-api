@@ -1,12 +1,12 @@
 import { Router } from 'express'; 
-import * as orders from '../Controller/OrdersController';
-import * as client from '../Controller/ClientController';
-import { verifyToken } from '../Middleware/ValidateToken';
+import * as orders from '../../controller/orderController.js';
+import * as client from '../../controller/clientController.js';
+import { verifyToken } from '../../middleware/ValidateToken.js';
 
 const router = Router();
 
 
-router.post('/add-new-orders', verifyToken, orders.addNewOrders );
+router.post('/orders', verifyToken, orders.addNewOrders );
 router.get('/get-orders-by-status/:statusOrder', verifyToken, orders.getOrdersByStatus );
 router.get('/get-details-order-by-id/:idOrderDetails', verifyToken, orders.getDetailsOrderById );
 router.put('/update-status-order-dispatched', verifyToken, orders.updateStatusToDispatched );

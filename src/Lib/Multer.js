@@ -2,7 +2,6 @@ import multer from 'multer';
 import path from 'path';
 
 var storageProfile = multer.diskStorage({
-
     destination: ( req, res, cb ) => {
         cb( null, 'src/Uploads/Profile')
     },

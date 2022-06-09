@@ -1,5 +1,5 @@
 import { response } from 'express';
-import pool from '../Database/mysql';
+import pool from '../Database/mysql.js';
 
 
 export const addNewProduct = async (req, res = response) => {
@@ -71,12 +71,12 @@ getProductsTopHome = async (req, res = response) => {
             page = 10 * (page - 1);
         }
 
-        const productsdb = await pool.query(`CALL SP_GET_PRODUCTS_TOP(?,?);`,[store_id, page]);
+        const productsDb = await pool.query(`CALL SP_GET_PRODUCTS_TOP(?,?);`,[store_id, page]);
 
         res.json({
             resp: true,
-            msg : '10 Prodcut by page '+ page,
-            productsdb: productsdb[0] 
+            msg : 'product by page '+ page,
+            productsDb: productsDb[0] 
         });
 
         
@@ -92,12 +92,12 @@ export const getImagesProducts = async ( req, res = response ) => {
 
     try {
 
-        const imageProductdb = await pool.query('SELECT * FROM imageProduct WHERE product_id = ?', [ req.params.id ]);
+        const imageProductDb = await pool.query('SELECT * FROM imageProduct WHERE product_id = ?', [ req.params.id ]);
 
         res.json({
             resp: true,
             msg : 'Get Images Products',
-            imageProductdb: imageProductdb
+            imageProductDb: imageProductDb
         });
         
     } catch (e) {
@@ -113,12 +113,12 @@ export const searchProductForName = async (req, res = response) => {
 
     try {
 
-        const productdb = await pool.query(`CALL SP_SEARCH_PRODUCT(?);`, [ req.params.nameProduct ]);
+        const productDb = await pool.query(`CALL SP_SEARCH_PRODUCT(?);`, [ req.params.nameProduct ]);
 
         res.json({
             resp: true,
             msg : 'Search products',
-            productsdb: productdb[0]
+            productsDb: productDb[0]
         });
         
     } catch (e) {
@@ -134,12 +134,12 @@ export const searchProductsForCategory = async (req, res = response) => {
 
     try {
 
-        const productdb = await pool.query(`CALL SP_SEARCH_FOR_CATEGORY(?);`, [req.params.idCategory]);
+        const productDb = await pool.query(`CALL SP_SEARCH_FOR_CATEGORY(?);`, [req.params.idCategory]);
 
         res.json({
             resp: true,
             msg : 'list Products for id Category',
-            productsdb : productdb[0]
+            productsDb : productDb[0]
         });
         
     } catch (e) {
@@ -155,12 +155,12 @@ export const listProductsAdmin = async (req, res = response) => {
 
     try {
 
-        const productsdb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN(?);`, req.uid);
+        const productsDb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN(?);`, req.uid);
 
         res.json({
             resp: true,
             msg : 'Top 10 Products',
-            productsdb: productsdb[0] 
+            productsDb: productsDb[0] 
         });
 
         

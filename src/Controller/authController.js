@@ -1,11 +1,11 @@
 import { response } from 'express';
 import bcrypt from 'bcrypt';
-import pool from '../Database/mysql';
-import { generateJsonWebToken } from '../Lib/JwToken';
+import pool from '../database/mysql.js';
+import { generateJsonWebToken } from '../lib/JwToken.js';
 
 
 export const loginController = async (req, res = response) => {
-
+    console.log('Call api: ../api/v1/auth/login-email');
     try {
 
         const { email, password } = req.body;
@@ -19,25 +19,26 @@ export const loginController = async (req, res = response) => {
             });
         }
 
-        const userdb = await pool.query(`CALL SP_LOGIN(?);`, [email]);
+        const userDb = await pool.query(`CALL SP_AUTH_LOGIN_EMAIL(?);`, [email]);
+        const user = userDb[0][0];
+        
 
-        const user = userdb[0][0];
-
-        const storedb = await pool.query(`CALL SP_LOGIN_STORE(?);`, [email]);
-
+        const storeDb = await pool.query(`CALL SP_AUTH_LOGIN_EMAIL_STORE(?);`, [email]);
+        
         let store = null;
         try {
-            store = storedb[0][0];
+            store = storeDb[0][0];
         } catch (e) {
             store = null;
         }
-        if (!await bcrypt.compareSync(password, user.passwordd)) {
+        if (!bcrypt.compareSync(password, user.password)) {
             return res.status(401).json({
                 resp: false,
                 msg: 'Wrong Credentials',
                 store: null
             });
         }
+        
         let token = await generateJsonWebToken(user.uid);
         res.json({
             resp: true,
@@ -52,7 +53,7 @@ export const loginController = async (req, res = response) => {
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
-            store: store == null? null: {
+            store: store == null ? null : {
                 id: store.id,
                 store_name: store.store_name,
                 address: store.address,
@@ -62,7 +63,7 @@ export const loginController = async (req, res = response) => {
                 close_time: store.close_time,
                 price_advance: store.price_advance,
                 categories: store.categories,
-                userid: store.userid,
+                userId: store.userId,
                 image: store.image
             },
             token
@@ -72,8 +73,7 @@ export const loginController = async (req, res = response) => {
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg: e,
-            store: null
+            msg: e
         });
     }
 }
@@ -89,18 +89,18 @@ export const loginWithPhoneController = async (req, res = response) => {
         if (validatedPhone.length == 0) {
             return res.status(400).json({
                 resp: false,
-                msg: 'Phone not exsit'
+                msg: 'Phone not exist'
             });
         }
 
-        const userdb = await pool.query(`CALL SP_LOGIN_WITH_PHONE(?);`, [phone]);
+        const userDb = await pool.query(`CALL SP_AUTH_LOGIN_PHONE(?);`, [phone]);
 
-        const user = userdb[0][0];
+        const user = userDb[0][0];
 
-        const storedb = await pool.query(`CALL SP_LOGIN_WITH_PHONE_STORE(?);`, [phone]);
+        const storeDb = await pool.query(`CALL SP_AUTH_LOGIN_WITH_PHONE_STORE(?);`, [phone]);
         let store = null;
         try {
-            store = storedb[0];
+            store = storeDb[0];
         } catch (e) {
             store = null;
         }
@@ -120,7 +120,7 @@ export const loginWithPhoneController = async (req, res = response) => {
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
-            store: store == null? null: {
+            store: store == null ? null : {
                 id: store.id,
                 store_name: store.store_name,
                 address: store.address,
@@ -130,7 +130,7 @@ export const loginWithPhoneController = async (req, res = response) => {
                 close_time: store.close_time,
                 price_advance: store.price_advance,
                 categories: store.categories,
-                userid: store.userid,
+                userId: store.userId,
                 image: store.image
             },
             token
@@ -146,24 +146,24 @@ export const loginWithPhoneController = async (req, res = response) => {
     }
 }
 
-
 export const renewTokenLogin = async (req, res = response) => {
+    console.log('Client '+ req.uid + " call API: ..api/v1/auth/renew-token-login");
     let error = 1;
     try {
-        
+
         const token = await generateJsonWebToken(req.uid);
         error++;
-        const userdb = await pool.query(`CALL SP_RENEWTOKENLOGIN(?);`, [req.uid]);
+        const userDb = await pool.query(`CALL SP_AUTH_RENEW_TOKEN_LOGIN(?);`, [req.uid]);
         error++;
-        const user = userdb[0][0];
+        const user = userDb[0][0];
         error++;
-        const storedb = await pool.query(`CALL SP_RENEWTOKENLOGIN_STORE(?);`, [req.uid]);
+        const storeDb = await pool.query(`CALL SP_AUTH_RENEW_TOKEN_LOGIN_STORE(?);`, [req.uid]);
         error++;
         let store = null;
         try {
-            store = storedb[0][0];
+            store = storeDb[0][0];
         } catch (e) {
-            
+
             store = null;
         }
         error++;
@@ -180,7 +180,7 @@ export const renewTokenLogin = async (req, res = response) => {
                 rol_id: user.rol_id,
                 notification_token: user.notification_token
             },
-            store: store == null? null :{
+            store: store == null ? null : {
                 id: store.id,
                 store_name: store.store_name,
                 address: store.address,
@@ -190,7 +190,7 @@ export const renewTokenLogin = async (req, res = response) => {
                 close_time: store.close_time,
                 price_advance: store.price_advance,
                 categories: store.categories,
-                userid: store.userid,
+                userId: store.userId,
                 image: store.image
             },
             token
@@ -198,8 +198,10 @@ export const renewTokenLogin = async (req, res = response) => {
     } catch (e) {
         res.status(500).json({
             resp: false,
-            msg: "Lỗi tại "+ error,
+            msg: "Lỗi tại " + error,
         });
     }
-
 }
+
+
+

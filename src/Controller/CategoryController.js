@@ -1,5 +1,5 @@
 import { response } from 'express';
-import pool from '../Database/mysql';
+import pool from '../database/mysql.js';
 
 export const addCategories = async (req, res = response) => {
 
