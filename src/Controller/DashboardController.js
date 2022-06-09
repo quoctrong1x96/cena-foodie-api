@@ -6,7 +6,7 @@
 // X = 5: Thống kê 10 người mua hàng cao nhất
 
 import { response } from 'express';
-import pool from '../Database/mysql';
+import pool from '../Database/mysql.js';
 
 export const getDashboardByStatus = async (req, res = response) => {
     try {
@@ -15,33 +15,33 @@ export const getDashboardByStatus = async (req, res = response) => {
         let storeId = req.header('store_id');
         let time = req.header('time');
         // variable
-        let listdb = null;
+        let listDb = null;
         // Call procedure
         switch (typeFunction) {
             case "DATE":
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_DATE(?,?);`, [storeId, time]);
                 break;
             case "MONTH":
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_MONTH(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_MONTH(?,?);`, [storeId, time]);
                 break;
             case "YEAR":
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_YEAR(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_YEAR(?,?);`, [storeId, time]);
                 break;
             case "ALLTIME":
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_ALLTIME(?);`, [storeId]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_ALLTIME(?);`, [storeId]);
                 break;
             case "FROMTO":
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_FROMTO(?,?,?);`, [storeId, time, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_FROMTO(?,?,?);`, [storeId, time, time]);
                 break;
             default:
-                listdb = await pool.query(`CALL SP_GET_DASH_01_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_01_BY_DATE(?,?);`, [storeId, time]);
                 break;
         }
         //return response
         res.json({
             resp: true,
             msg: 'Get dashboard by Status filter with '+ typeFunction,
-            dashboardByStatus: listdb[0][0]==null?[]:listdb[0][0]
+            dashboardByStatus: listDb[0][0]==null?[]:listDb[0][0]
         });
 
     } catch (e) {
@@ -53,40 +53,40 @@ export const getDashboardByStatus = async (req, res = response) => {
     }
 }
 
-export const getDashboardByPaytype = async (req, res = response) => {
+export const getDashboardByPayType = async (req, res = response) => {
     try {
         // get parameter
         let typeFunction = req.header('type');
         let storeId = req.header('store_id');
         let time = req.header('time');
         // variable
-        let listdb = null;
+        let listDb = null;
         // Call procedure
         switch (typeFunction) {
             case "DATE":
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_DATE(?,?);`, [storeId, time]);
                 break;
             case "MONTH":
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_MONTH(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_MONTH(?,?);`, [storeId, time]);
                 break;
             case "YEAR":
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_YEAR(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_YEAR(?,?);`, [storeId, time]);
                 break;
             case "ALLTIME":
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_ALLTIME(?);`, [storeId]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_ALLTIME(?);`, [storeId]);
                 break;
             case "FROMTO":
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_FROMTO(?,?,?);`, [storeId, time, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_FROMTO(?,?,?);`, [storeId, time, time]);
                 break;
             default:
-                listdb = await pool.query(`CALL SP_GET_DASH_02_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_02_BY_DATE(?,?);`, [storeId, time]);
                 break;
         }
         //return response
         res.json({
             resp: true,
             msg: 'Get dashboard by Payment Type filter with '+ typeFunction,
-            dashboardByPayment: listdb[0][0]==null?[]:listdb[0][0]
+            dashboardByPayment: listDb[0][0]==null?[]:listDb[0][0]
         });
 
     } catch (e) {
@@ -106,33 +106,33 @@ export const getDashboardByDelivered = async (req, res = response) => {
         let time = req.header('time');        
         let page = req.header('page');
         // variable
-        let listdb = null;
+        let listDb = null;
         // Call procedure
         switch (typeFunction) {
             case "DATE":
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_DATE(?,?,?);`, [storeId, time, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_DATE(?,?,?);`, [storeId, time, page]);
                 break;
             case "MONTH":
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_MONTH(?,?,?);`, [storeId, time, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_MONTH(?,?,?);`, [storeId, time, page]);
                 break;
             case "YEAR":
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_YEAR(?,?,?);`, [storeId, time, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_YEAR(?,?,?);`, [storeId, time, page]);
                 break;
             case "ALLTIME":
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_ALLTIME(?,?);`, [storeId, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_ALLTIME(?,?);`, [storeId, page]);
                 break;
             case "FROMTO":
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_FROMTO(?,?,?,?);`, [storeId, time, time, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_FROMTO(?,?,?,?);`, [storeId, time, time, page]);
                 break;
             default:
-                listdb = await pool.query(`CALL SP_GET_DASH_03_BY_DATE(?,?,?);`, [storeId, time, page]);
+                listDb = await pool.query(`CALL SP_GET_DASH_03_BY_DATE(?,?,?);`, [storeId, time, page]);
                 break;
         }
         //return response
         res.json({
             resp: true,
             msg: 'Get dashboard by Delivered filter with '+ typeFunction,
-            dashboardByDelivered: listdb[0]==null?[]:listdb[0]
+            dashboardByDelivered: listDb[0]==null?[]:listDb[0]
         });
 
     } catch (e) {
@@ -151,33 +151,33 @@ export const getDashboardByProduct = async (req, res = response) => {
         let storeId = req.header('store_id');
         let time = req.header('time');   
         // variable
-        let listdb = null;
+        let listDb = null;
         // Call procedure
         switch (typeFunction) {
             case "DATE":
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_DATE(?,?);`, [storeId, time]);
                 break;
             case "MONTH":
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_MONTH(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_MONTH(?,?);`, [storeId, time]);
                 break;
             case "YEAR":
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_YEAR(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_YEAR(?,?);`, [storeId, time]);
                 break;
             case "ALLTIME":
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_ALLTIME(?);`, [storeId]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_ALLTIME(?);`, [storeId]);
                 break;
             case "FROMTO":
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_FROMTO(?,?,?);`, [storeId, time, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_FROMTO(?,?,?);`, [storeId, time, time]);
                 break;
             default:
-                listdb = await pool.query(`CALL SP_GET_DASH_04_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_04_BY_DATE(?,?);`, [storeId, time]);
                 break;
         }
         //return response
         res.json({
             resp: true,
             msg: 'Get dashboard by Product filter with '+ typeFunction,
-            dashboardByProduct: listdb[0]==null?[]:listdb[0]
+            dashboardByProduct: listDb[0]==null?[]:listDb[0]
         });
 
     } catch (e) {
@@ -196,33 +196,33 @@ export const getDashboardByPersonal = async (req, res = response) => {
         let storeId = req.header('store_id');
         let time = req.header('time');   
         // variable
-        let listdb = null;
+        let listDb = null;
         // Call procedure
         switch (typeFunction) {
             case "DATE":
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_DATE(?,?);`, [storeId, time]);
                 break;
             case "MONTH":
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_MONTH(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_MONTH(?,?);`, [storeId, time]);
                 break;
             case "YEAR":
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_YEAR(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_YEAR(?,?);`, [storeId, time]);
                 break;
             case "ALLTIME":
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_ALLTIME(?);`, [storeId]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_ALLTIME(?);`, [storeId]);
                 break;
             case "FROMTO":
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_FROMTO(?,?,?);`, [storeId, time, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_FROMTO(?,?,?);`, [storeId, time, time]);
                 break;
             default:
-                listdb = await pool.query(`CALL SP_GET_DASH_05_BY_DATE(?,?);`, [storeId, time]);
+                listDb = await pool.query(`CALL SP_GET_DASH_05_BY_DATE(?,?);`, [storeId, time]);
                 break;
         }
         //return response
         res.json({
             resp: true,
             msg: 'Get dashboard by Personal filter with '+ typeFunction,
-            dashboardByPersonal: listdb[0]==null?[]:listdb[0]
+            dashboardByPersonal: listDb[0]==null?[]:listDb[0]
         });
 
     } catch (e) {

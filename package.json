@@ -3,22 +3,31 @@
   "version": "1.0.0",
   "description": "cenafoodie Backend ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "babel-node src/index.js",
-    "dev": "nodemon src/index.js --exec babel-node"
+    "start": "nodemon src/index.js",
+    "dev": "nodemon src/index.js --exec babel-node",
+    "hmr": "nodemon src/index.js",
+    "nodemon": "npm run hmr",
+    "test": "mocha 'src/test/*.test.js' --recursive --reporter mocha-junit-reporter --timeout 60000 --exit"
   },
-  "author": "Frave Developer",
+  "author": "Bui Quoc Trong",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
     "fs-extra": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.0.0",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
     "ngrok": "^4.3.1",
-    "socket.io": "^2.4.1"
+    "socket.io": "^2.4.1",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

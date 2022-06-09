@@ -23,7 +23,7 @@ export const verifyToken = ( req, res, next ) => {
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : "Lỗi 1",
+            msg : e,
             user: { uid: 0, firstName: '', lastName: '', image: '', email: '', rol_id: 0 },
             token: ''
         });
