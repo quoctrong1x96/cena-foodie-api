@@ -27,12 +27,12 @@ export const getVoucherByStoreId = async (req, res = response) => {
     const store_id  = req.header('store_id');
 
     try {
-        const voucherdb = await pool.query(`CALL SP_GET_VOCHER_BY_STORE_ID(?);`,[store_id]);
+        const voucherDb = await pool.query(`CALL SP_GET_VOCHER_BY_STORE_ID(?);`,[store_id]);
 
         res.json({
             resp: true,
             msg : 'Get voucher by store_id = ' + store_id,
-            productsdb: voucherdb[0]
+            productsDb: voucherDb[0]
         });
 
     } catch (err) {
@@ -48,12 +48,12 @@ export const getVoucherByProductId = async (req, res = response) => {
     const product_id = req.header('product_id');
 
     try {
-        const voucherdb = await pool.query(`CALL SP_GET_VOCHER_BY_PRODUCT_ID(?);`,[product_id]);
+        const voucherDb = await pool.query(`CALL SP_GET_VOCHER_BY_PRODUCT_ID(?);`,[product_id]);
 
         res.json({
             resp: true,
             msg : 'Get voucher by product_id = ' + product_id,
-            productsdb: voucherdb[0]
+            productsDb: voucherDb[0]
         });
 
     } catch (err) {
@@ -67,12 +67,12 @@ export const getVoucherByProductId = async (req, res = response) => {
 export const getSystemVoucher = async (req, res = response) => {
 
     try {
-        const voucherdb = await pool.query(`CALL SP_GET_SYSTEM_VOCHER();`);
+        const voucherDb = await pool.query(`CALL SP_GET_SYSTEM_VOCHER();`);
 
         res.json({
             resp: true,
             msg : 'Get all System voucher= ',
-            productsdb: voucherdb[0]
+            productsDb: voucherDb[0]
         });
 
     } catch (err) {

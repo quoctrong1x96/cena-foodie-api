@@ -51,7 +51,6 @@ export const registerUser = async (req, res = response) => {
 }
 
 export const updateLastName = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id/first-name");
     try {
         const { lastName } = req.body;
 
@@ -74,7 +73,6 @@ export const updateLastName = async (req, res = response) => {
 }
 
 export const updateFirstName = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id/first-name");
     try {
         const { firstName } = req.body;
 
@@ -97,7 +95,6 @@ export const updateFirstName = async (req, res = response) => {
 }
 
 export const getUsersById = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id");
     try {
 
         const query = await pool.query(`CALL SP_USER_BY_ID(?);`, [req.params.id]);
@@ -105,7 +102,7 @@ export const getUsersById = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'User was return successfully',
-            user: query[0][0]
+            data: query[0][0]
         });
 
     } catch (e) {
@@ -140,7 +137,6 @@ export const putUsersById = async (req, res = response) => {
 }
 
 export const getUserUpdated = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id/last-update");
     try {
 
         const userDb = await pool.query(`CALL SP_USER_UPDATED(?);`, [req.params.id]);
@@ -150,7 +146,7 @@ export const getUserUpdated = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'User updated',
-            user: {
+            data: {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 image: user.image,
@@ -169,7 +165,6 @@ export const getUserUpdated = async (req, res = response) => {
 }
 
 export const changePassword = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id/password");
     try {
 
         const { currentPassword, newPassword } = req.body;
@@ -203,7 +198,6 @@ export const changePassword = async (req, res = response) => {
 }
 
 export const changeImageProfile = async (req, res = response) => {
-    console.log("Call api: PATCH ../api/v1/users/id/image-profile");
     try {
 
         const imagePath = req.file.filename;
@@ -229,7 +223,6 @@ export const changeImageProfile = async (req, res = response) => {
 }
 
 export const getAddressesUser = async (req, res = response) => {
-    console.log("Call api: get ../api/v1/users/id/addresses");
     try {
 
         const addressesDb = await pool.query('SELECT id, typeid, receiver, phone, building, door, note, address, Latitude, Longitude FROM addresses WHERE persona_id = ? AND flag = TRUE', [req.uid]);
@@ -237,7 +230,7 @@ export const getAddressesUser = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'List the Addresses',
-            listAddresses: addressesDb
+            data: addressesDb
         });
 
     } catch (e) {
@@ -250,7 +243,6 @@ export const getAddressesUser = async (req, res = response) => {
 }
 
 export const deleteAddressById = async (req, res = response) => {
-    console.log("Call api: DELETE ../api/v1/users/id/addresses/:idAddress");
     try {
         
         pool.query('UPDATE addresses SET flag = FALSE WHERE id = ? AND persona_id = ?', [req.params.idAddress, req.params.id]);
@@ -269,7 +261,6 @@ export const deleteAddressById = async (req, res = response) => {
 }
 
 export const addStreetAddress = async (req, res = response) => {
-    console.log("Call api: POST ../api/v1/users/id/addresses");
     try {
 
         const { type, receiver, phone, building, door, note, address, latitude, longitude } = req.body;
@@ -291,14 +282,13 @@ export const addStreetAddress = async (req, res = response) => {
 }
 
 export const getAddressOne = async (req, res = response) => {
-    console.log("Call api: GET ../api/v1/users/id/addresses/first");
     try {
         const addressDb = await pool.query('SELECT * FROM addresses WHERE persona_id = ? ORDER BY id DESC LIMIT 1', [req.uid]);
 
         res.json({
             resp: true,
             msg: 'One Address',
-            address: addressDb[0]
+            data: addressDb[0]
         });
 
     } catch (e) {
@@ -310,7 +300,6 @@ export const getAddressOne = async (req, res = response) => {
 }
 
 export const getAddressById = async (req, res = response) => {
-    console.log("Call api: GET ../api/v1/users/id/:idAddress");
     try {
 
         const addressDb = await pool.query('SELECT * FROM addresses WHERE id = ? ORDER BY id DESC LIMIT 1', [req.params.idAddress]);
@@ -319,7 +308,7 @@ export const getAddressById = async (req, res = response) => {
             res.json({
                 resp: true,
                 msg: 'return Address',
-                address: addressDb[0]
+                data: addressDb[0]
             });
         }
     } catch (e) {
@@ -331,7 +320,6 @@ export const getAddressById = async (req, res = response) => {
 }
 
 export const updateNotificationToken = async (req, res = response) => {
-    console.log("Call api: PUT ../api/v1/users/id/notification-token");
     try {
 
         const { nToken } = req.body;
@@ -353,7 +341,6 @@ export const updateNotificationToken = async (req, res = response) => {
 }
 
 export const getAdminNotificationToken = async (req, res = response) => {
-    console.log("Call api: GET ../api/v1/users/id/notification-token");
     try {
         const store_id = req.header('store_id');
 
@@ -395,7 +382,6 @@ export const updateDeliveryToClient = async (req, res = response) => {
     }
 }
 export const enterReferenceCode = async (req, res = response) => {
-    console.log("Call api: PUT ../api/v1/users/id/reference");
     try {
         const {code } = req.body;
         const message = await pool.query(`CALL SP_USERS_REFERENCE_ADD(?, ?);`, [req.params.id, code]);

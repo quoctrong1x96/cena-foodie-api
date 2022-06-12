@@ -39,10 +39,9 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1/auth', routeAuth);
 app.use('/api/v1/users', routerUser);
-app.use('/api/v1', routerProduct);
-app.use('/api/v1', routerCategory);
-app.use('/api/v1', routerOrder);
-app.use('/api/v1', routerStore);
+app.use('/api/v1/stores', routerStore);
+app.use('/api/v1/orders', routerOrder);
+
 app.use('/api/v1/voucher', routerVoucher);
 app.use('/api/v1/dashboard', routerDashboard);
 

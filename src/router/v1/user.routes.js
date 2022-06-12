@@ -3,29 +3,31 @@ import { verifyToken } from '../../middleware/validateToken.js';
 import * as user from '../../controller/userController.js';
 import { upLoadsProfile } from '../../Lib/Multer.js';
 
+import { logRequest } from '../../middleware/logUri.js';
+
 const router = Router();
 
 
 router.post('/', upLoadsProfile.single('image'), user.registerUser );
-router.get('/:id', verifyToken, user.getUsersById);
-router.put('/:id',verifyToken, user.putUsersById);
-router.get('/:id/last-update', verifyToken, user.getUserUpdated);
+router.get('/:id', [verifyToken,logRequest], user.getUsersById);
+router.put('/:id',[verifyToken,logRequest], user.putUsersById);
+router.get('/:id/last-update', [verifyToken,logRequest], user.getUserUpdated);
 
-router.put('/:id/password', verifyToken, user.changePassword);
-router.put('/:id/image-profile', [verifyToken, upLoadsProfile.single('image')] , user.changeImageProfile );3
-router.put('/:id/notification-token', verifyToken, user.updateNotificationToken );
-router.patch('/:id/last-name', verifyToken, user.updateLastName);
-router.patch('/:id/first-name', verifyToken, user.updateFirstName);
-router.patch('/:id/reference', verifyToken, user.enterReferenceCode);
+router.put('/:id/password', [verifyToken,logRequest], user.changePassword);
+router.put('/:id/image-profile', [verifyToken,logRequest, upLoadsProfile.single('image')] , user.changeImageProfile );
+router.put('/:id/notification-token', [verifyToken,logRequest], user.updateNotificationToken );
+router.patch('/:id/last-name', [verifyToken,logRequest], user.updateLastName);
+router.patch('/:id/first-name', [verifyToken,logRequest], user.updateFirstName);
+router.patch('/:id/reference', [verifyToken,logRequest], user.enterReferenceCode);
 
-router.get('/:id/addresses', verifyToken, user.getAddressesUser );
-router.delete('/:id/addresses/:idAddress', verifyToken, user.deleteAddressById );
-router.post('/:id/addresses', verifyToken, user.addStreetAddress );
-router.get('/:id/addresses/first', verifyToken, user.getAddressOne );
-router.get('/:id/addresses/:idAddress', verifyToken, user.getAddressById );
+router.get('/:id/addresses', [verifyToken,logRequest], user.getAddressesUser );
+router.delete('/:id/addresses/:idAddress', [verifyToken,logRequest], user.deleteAddressById );
+router.post('/:id/addresses', [verifyToken,logRequest], user.addStreetAddress );
+router.get('/:id/addresses/first', [verifyToken,logRequest], user.getAddressOne );
+router.get('/:id/addresses/:idAddress', [verifyToken,logRequest], user.getAddressById );
 
 
 router.get('/admins-notification-token', verifyToken , user.getAdminNotificationToken );
-router.put('/delivery-to-client/:idPerson', verifyToken, user.updateDeliveryToClient );
+router.put('/delivery-to-client/:idPerson', [verifyToken,logRequest], user.updateDeliveryToClient );
 
 export default router;

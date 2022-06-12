@@ -5,7 +5,7 @@ export const socketOrderDelivery = (io) => {
 
     nameSpaceOrders.on('connection', socket => {
         
-        console.log('USER CONECTED');
+        console.log('USER CONNECTED');
 
         socket.on('position', (data) => {
 

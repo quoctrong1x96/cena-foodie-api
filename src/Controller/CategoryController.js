@@ -2,12 +2,11 @@ import { response } from 'express';
 import pool from '../database/mysql.js';
 
 export const addCategories = async (req, res = response) => {
-
     try {
 
         const { category, description, store_id } = req.body;
 
-        await pool.query(`CALL SP_ADD_CATEGORY(?,?,?);`, [ category, description, store_id ]);
+        await pool.query(`CALL SP_STORES_ADD_CATEGORY(?,?,?);`, [ category, description, store_id ]);
 
         res.json({
             resp: true,
@@ -23,12 +22,11 @@ export const addCategories = async (req, res = response) => {
 }
 
 export const updateCategories = async (req, res = response) => {
-
     try {
 
-        const { category, description, id } = req.body;
+        const { category, description } = req.body;
 
-        await pool.query(`CALL SP_UPDATE_CATEGORY(?,?,?);`, [ category, description, id ]);
+        await pool.query(`CALL SP_STORES_UPDATE_CATEGORY(?,?,?);`, [ category, description, req.params.idCategory ]);
 
         res.json({
             resp: true,

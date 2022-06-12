@@ -3,12 +3,11 @@ import pool from '../Database/mysql.js';
 
 
 export const addNewProduct = async (req, res = response) => {
-
     try {
 
-        const {store_id, name, description, price, category } = req.body;
+        const {name, description, price, category } = req.body;
         
-        const rows = await pool.query('INSERT INTO products (nameProduct, description, price, category_id, store_id) VALUE (?,?,?,?,?)', [name, description, price, category, store_id]);
+        const rows = await pool.query('INSERT INTO products (nameProduct, description, price, category_id, store_id) VALUE (?,?,?,?,?)', [name, description, price, category, req.params.id]);
         
         req.files.forEach(image => {
             pool.query('INSERT INTO imageProduct (picture, product_id) value (?,?)', [ image.filename, rows.insertId ]);
@@ -29,12 +28,11 @@ export const addNewProduct = async (req, res = response) => {
 }
 
 export const updateProduct = async (req, res = response) => {
-
     try {
 
-        const {product_id, name, description, price, category } = req.body;
+        const {name, description, price, category } = req.body;
         
-        const rows = await pool.query('Update products set nameProduct = ? , description = ?, price = ?, category_id = ? where  id = ?', [name, description, price, category, product_id]);
+        const rows = await pool.query('Update products set nameProduct = ? , description = ?, price = ?, category_id = ? where  id = ?', [name, description, price, category, req.params.idProduct]);
         
         if(req.files && req.files.length> 0){
             pool.query('DELETE imageProduct WHERE product_id = ?)', [ product_id]);
@@ -42,7 +40,6 @@ export const updateProduct = async (req, res = response) => {
                 pool.query('INSERT INTO imageProduct (picture, product_id) value (?,?)', [ image.filename, rows.insertId ]);
             });
         }
-       
 
         res.json({
             resp: true,
@@ -58,24 +55,14 @@ export const updateProduct = async (req, res = response) => {
 
 }
 
-export const 
-getProductsTopHome = async (req, res = response) => {
-
+export const getProductsTopHome = async (req, res = response) => {
     try {
-        let store_id = req.header('store_id');
-        let page = req.header('page');
-
-        if(page == 1){
-            page = 0;
-        }else{
-            page = 10 * (page - 1);
-        }
-
-        const productsDb = await pool.query(`CALL SP_GET_PRODUCTS_TOP(?,?);`,[store_id, page]);
+        let store_id = req.params.id;
+        const productsDb = await pool.query(`CALL SP_STORES_ALL_PRODUCTS(?);`,[store_id]);
 
         res.json({
             resp: true,
-            msg : 'product by page '+ page,
+            msg : 'All products of store: '+ store_id,
             productsDb: productsDb[0] 
         });
 
@@ -89,10 +76,9 @@ getProductsTopHome = async (req, res = response) => {
 }
 
 export const getImagesProducts = async ( req, res = response ) => {
-
     try {
 
-        const imageProductDb = await pool.query('SELECT * FROM imageProduct WHERE product_id = ?', [ req.params.id ]);
+        const imageProductDb = await pool.query('SELECT * FROM imageProduct WHERE product_id = ? and store_id = ?', [ req.params.idProduct, req.params.id ]);
 
         res.json({
             resp: true,
@@ -176,9 +162,9 @@ export const updateStatusProduct = async (req, res = response) => {
 
     try {
 
-        const { status, idProduct } = req.body;
+        const { status } = req.body;
 
-        await pool.query('UPDATE products SET status = ? WHERE id = ?', [ parseInt(status), parseInt(idProduct) ]);
+        await pool.query('UPDATE products SET status = ? WHERE id = ?', [ parseInt(status), parseInt(req.params.idProduct) ]);
 
         res.json({
             resp: true,
