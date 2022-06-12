@@ -1,12 +1,13 @@
 // get-all-store-by-page
 import { response } from 'express';
 import pool from '../Database/mysql.js';
+import bcrypt from 'bcrypt';
 
 
 export const getStoreNameById = async (req, res = response) => {
 
     try {
-        const stores = await pool.query(`SELECT store_name,address  FROM stores where id = ?`, req.params.id);
+        const stores = await pool.query(`SELECT store_name  FROM stores where id = ?`, req.params.id);
 
         res.json({
             resp: true,
@@ -24,17 +25,33 @@ export const getStoreNameById = async (req, res = response) => {
 
 }
 
-export const getStoresPerPage = async (req, res = response) => {
-
+export const getStoreById = async (req, res = response) => {
     try {
-        let offset =  req.query.filters.offset;
-        let limit =  req.query.filters.limit;
-        let lng =  req.query.filters.lng;
-        let lat =  req.query.filters.lat;
-        // let offset = req.header('offset');
-        // let limit = req.header('limit');
-        // let lng = req.header('lng');
-        // let lat = req.header('lat');
+        const stores = await pool.query(`SELECT *   FROM stores where id = ?`, req.params.id);
+
+        res.json({
+            resp: true,
+            msg : 'Store id = '+ req.params.storeId,
+            data: stores 
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
+export const getStoresPerPage = async (req, res = response) => {
+    try {
+        let offset =  req.query.offset;
+        
+        let limit =  req.query.limit;
+        let lng =  req.query.lng;
+        let lat =  req.query.lat;
         if(offset == null){
             offset = 0;
         }
@@ -68,15 +85,14 @@ export const getStoresPerPage = async (req, res = response) => {
 }
 
 export const getAllDelivery = async ( req, res = response ) => {
-
     try {
 
-        let deliveryDb = await pool.query(`CALL SP_ALL_DELIVERYS();`);
+        let deliveryDb = await pool.query(`CALL SP_STORES_DELIVERIES(?);`, [req.params.id]);
 
         res.json({
             resp: true,
             msg : 'Get All Delivery',
-            delivery: deliveryDb[0] 
+            data: deliveryDb[0] 
         });
         
     } catch (e) {
@@ -89,14 +105,13 @@ export const getAllDelivery = async ( req, res = response ) => {
 }
 
 export const registerDelivery = async (req, res = response) => {
-
     try {
 
-        const { firstName, lastName, phone, email, password, notification_token } = req.body;
+        const { firstName, lastName, phone, email, password, notificationToken } = req.body;
         const imagePath = req.file.filename;
 
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
-
+        
         if (validatedEmail.length > 0) {
             return res.status(401).json({
                 resp: false,
@@ -106,8 +121,7 @@ export const registerDelivery = async (req, res = response) => {
 
         let salt = bcrypt.genSaltSync();
         const pass = bcrypt.hashSync(password, salt);
-
-        pool.query(`CALL SP_REGISTER(?,?,?,?,?,?,?,?);`, [firstName, lastName, phone, imagePath, email, pass, 3, notification_token]);
+        pool.query(`CALL SP_USERS_REGISTER(?,?,?,?,?,?,?,?);`, [firstName, lastName, phone, imagePath, email, pass, 3, notificationToken]);
 
         res.json({
             resp: true,

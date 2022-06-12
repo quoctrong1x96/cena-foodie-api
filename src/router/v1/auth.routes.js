@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { verifyToken } from '../../middleware/ValidateToken.js';
 import * as auth from '../../controller/authController.js';
-import { upLoadsProfile } from '../../lib/Multer.js';
+
+import { logRequest } from '../../middleware/logUri.js';
 
 const router = Router();
 
@@ -35,7 +36,7 @@ const router = Router();
  */
 router.post('/login-email', auth.loginController);
 router.post('/login-phone', auth.loginWithPhoneController);
-router.get('/renew-token-login', verifyToken, auth.renewTokenLogin);
+router.get('/renew-token-login', [verifyToken,logRequest], auth.renewTokenLogin);
 
 
 export default router;

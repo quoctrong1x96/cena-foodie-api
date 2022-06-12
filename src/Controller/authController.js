@@ -5,7 +5,6 @@ import { generateJsonWebToken } from '../lib/JwToken.js';
 
 
 export const loginController = async (req, res = response) => {
-    console.log('Call api: ../api/v1/auth/login-email');
     try {
 
         const { email, password } = req.body;
@@ -21,10 +20,10 @@ export const loginController = async (req, res = response) => {
 
         const userDb = await pool.query(`CALL SP_AUTH_LOGIN_EMAIL(?);`, [email]);
         const user = userDb[0][0];
-        
+
 
         const storeDb = await pool.query(`CALL SP_AUTH_LOGIN_EMAIL_STORE(?);`, [email]);
-        
+
         let store = null;
         try {
             store = storeDb[0][0];
@@ -38,35 +37,37 @@ export const loginController = async (req, res = response) => {
                 store: null
             });
         }
-        
+
         let token = await generateJsonWebToken(user.uid);
         res.json({
             resp: true,
             msg: 'Welcome to Cena Foodie',
-            user: {
-                uid: user.uid,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                image: user.image,
-                phone: user.phone,
-                email: user.email,
-                rol_id: user.rol_id,
-                notification_token: user.notification_token
-            },
-            store: store == null ? null : {
-                id: store.id,
-                store_name: store.store_name,
-                address: store.address,
-                latitude: store.latitude,
-                longitude: store.longitude,
-                open_time: store.open_time,
-                close_time: store.close_time,
-                price_advance: store.price_advance,
-                categories: store.categories,
-                userId: store.userId,
-                image: store.image
-            },
-            token
+            data: {
+                user: {
+                    uid: user.uid,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    image: user.image,
+                    phone: user.phone,
+                    email: user.email,
+                    rol_id: user.rol_id,
+                    notification_token: user.notification_token
+                },
+                store: store == null ? null : {
+                    id: store.id,
+                    store_name: store.store_name,
+                    address: store.address,
+                    latitude: store.latitude,
+                    longitude: store.longitude,
+                    open_time: store.open_time,
+                    close_time: store.close_time,
+                    price_advance: store.price_advance,
+                    categories: store.categories,
+                    userId: store.userId,
+                    image: store.image
+                },
+                token
+            }
         });
 
 
@@ -110,44 +111,44 @@ export const loginWithPhoneController = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Welcome to Cena Foodie',
-            user: {
-                uid: user.uid,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                image: user.image,
-                email: user.email,
-                phone: user.phone,
-                rol_id: user.rol_id,
-                notification_token: user.notification_token
-            },
-            store: store == null ? null : {
-                id: store.id,
-                store_name: store.store_name,
-                address: store.address,
-                latitude: store.latitude,
-                longitude: store.longitude,
-                open_time: store.open_time,
-                close_time: store.close_time,
-                price_advance: store.price_advance,
-                categories: store.categories,
-                userId: store.userId,
-                image: store.image
-            },
-            token
+            data: {
+                user: {
+                    uid: user.uid,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    image: user.image,
+                    email: user.email,
+                    phone: user.phone,
+                    rol_id: user.rol_id,
+                    notification_token: user.notification_token
+                },
+                store: store == null ? null : {
+                    id: store.id,
+                    store_name: store.store_name,
+                    address: store.address,
+                    latitude: store.latitude,
+                    longitude: store.longitude,
+                    open_time: store.open_time,
+                    close_time: store.close_time,
+                    price_advance: store.price_advance,
+                    categories: store.categories,
+                    userId: store.userId,
+                    image: store.image
+                },
+                token
+            }
         });
 
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg: e,
-            store: null
+            msg: e
         });
     }
 }
 
 export const renewTokenLogin = async (req, res = response) => {
-    console.log('Client '+ req.uid + " call API: ..api/v1/auth/renew-token-login");
     let error = 1;
     try {
 
@@ -170,35 +171,37 @@ export const renewTokenLogin = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Welcome to Cena Foodie',
-            user: {
-                uid: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                image: user.image,
-                phone: user.phone,
-                email: user.email,
-                rol_id: user.rol_id,
-                notification_token: user.notification_token
-            },
-            store: store == null ? null : {
-                id: store.id,
-                store_name: store.store_name,
-                address: store.address,
-                latitude: store.latitude,
-                longitude: store.longitude,
-                open_time: store.open_time,
-                close_time: store.close_time,
-                price_advance: store.price_advance,
-                categories: store.categories,
-                userId: store.userId,
-                image: store.image
-            },
-            token
+            data: {
+                user: {
+                    uid: user.id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    image: user.image,
+                    phone: user.phone,
+                    email: user.email,
+                    rol_id: user.rol_id,
+                    notification_token: user.notification_token
+                },
+                store: store == null ? null : {
+                    id: store.id,
+                    store_name: store.store_name,
+                    address: store.address,
+                    latitude: store.latitude,
+                    longitude: store.longitude,
+                    open_time: store.open_time,
+                    close_time: store.close_time,
+                    price_advance: store.price_advance,
+                    categories: store.categories,
+                    userId: store.userId,
+                    image: store.image
+                },
+                token
+            }
         });
     } catch (e) {
         res.status(500).json({
             resp: false,
-            msg: "Lỗi tại " + error,
+            msg: e,
         });
     }
 }
