@@ -3,12 +3,12 @@ import * as store from '../../controller/storeController.js';
 import { verifyToken } from '../../middleware/validateToken.js';
 import { logRequest } from '../../middleware/logUri.js';
 import * as category from '../../controller/categoryController.js';
-import { upLoadsProfile } from '../../lib/Multer.js';
+import { upLoadsProfile } from '../../lib/multer.js';
 
 import * as voucher from '../../controller/voucherController.js';
 
 
-import { upLoadsProducts } from '../../lib/Multer.js';
+import { upLoadsProducts } from '../../lib/multer.js';
 import * as product from '../../controller/productController.js';
 const router = Router();
 

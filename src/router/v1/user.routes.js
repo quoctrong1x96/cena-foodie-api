@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { verifyToken } from '../../middleware/validateToken.js';
 import * as user from '../../controller/userController.js';
-import { upLoadsProfile } from '../../Lib/Multer.js';
+import { upLoadsProfile } from '../../lib/multer.js';
 
 import { logRequest } from '../../middleware/logUri.js';
 

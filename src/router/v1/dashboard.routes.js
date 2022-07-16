@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as dashboard from '../../controller/dashboardController.js';
-import { verifyToken } from '../../middleware/ValidateToken.js';
+import { verifyToken } from '../../middleware/validateToken.js';
 
 import { logRequest } from '../../middleware/logUri.js';
 
