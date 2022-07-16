@@ -56,7 +56,7 @@ export const getStoresPerPage = async (req, res = response) => {
             offset = 0;
         }
         if(limit == null){
-            limit = 100;
+            limit = 100; 
         }
 
         if(lng == null || lat == null){
@@ -135,6 +135,46 @@ export const registerDelivery = async (req, res = response) => {
             msg: e
         });
     }
+}
 
+export const updateStoreImage = async (req, res = response) => {
+    try {
+        const imagePath = req.file.filename;
 
+        const imageDb = await pool.query('SELECT image FROM stores WHERE id = ?', [req.params.id]);
+
+        await fs.unlink(path.resolve('src/Uploads/Profile/' + imageDb[0].image));
+
+        pool.query('UPDATE stores SET image = ? WHERE id = ?', [imagePath, req.params.id]);
+
+        res.json({
+            resp: true,
+            msg: 'Picture changed'
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg: e
+        });
+    }
+}
+
+export const updateStoreTime = async (req, res = response) => {
+    try {
+        const {openTime,closeTime} = req.body
+
+        pool.query('UPDATE stores SET open_time = ?, close_time = ? WHERE id = ?', [openTime, closeTime, req.params.id]);
+
+        res.json({
+            resp: true,
+            msg: 'Store time changed'
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg: e
+        });
+    }
 }

@@ -4,9 +4,9 @@ import pool from '../database/mysql.js';
 export const addCategories = async (req, res = response) => {
     try {
 
-        const { category, description, store_id } = req.body;
+        const { category, description } = req.body;
 
-        await pool.query(`CALL SP_STORES_ADD_CATEGORY(?,?,?);`, [ category, description, store_id ]);
+        await pool.query(`CALL SP_STORES_ADD_CATEGORY(?,?,?);`, [ category, description, req.params.id ]);
 
         res.json({
             resp: true,
@@ -86,3 +86,28 @@ export const getCategoriesByStore = async ( req, res = response ) => {
 
 }
 
+export const deleteCategories = async (req, res = response) => {
+    try {
+
+        const result = await pool.query(`CALL SP_STORES_DELETE_CATEGORY(?);`, [ req.params.idCategory ]);
+
+        if(result == "Deleted"){
+            res.json({
+                resp: true,
+                msg : result[0][0]['message'],
+            });
+        }else{
+            res.json({
+                resp: false,
+                msg : result[0][0]['message'],
+            });
+        }
+        
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        }); 
+    }
+}
