@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { verifyToken } from '../../middleware/ValidateToken.js';
+import { verifyToken } from '../../middleware/validateToken.js';
 import * as auth from '../../controller/authController.js';
 
 import { logRequest } from '../../middleware/logUri.js';
