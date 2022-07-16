@@ -13,7 +13,6 @@ import routerUser from './router/v1/user.routes.js';
 import routerProduct from './router/v1/product.routes.js';
 import routerOrder from './router/v1/order.routes.js';
 import routerStore from './router/v1/store.routes.js';
-import routerVoucher from './router/v1/voucher.routes.js';
 import routerDashboard from './router/v1/dashboard.routes.js';
 
 config();
@@ -41,7 +40,6 @@ app.use('/api/v1/stores', routerStore);
 app.use('/api/v1/orders', routerOrder);
 app.use('/api/v1/products', routerProduct);
 
-app.use('/api/v1/vouchers', routerVoucher);
 app.use('/api/v1/dashboard', routerDashboard);
 
 
