@@ -94,6 +94,72 @@ export const updateFirstName = async (req, res = response) => {
 
 }
 
+export const updateSex = async (req, res = response) => {
+    try {
+        const { sex } = req.body;
+
+        const person = await pool.query(`CALL SP_USERS_UPDATE_SEX(?,?);`, [req.params.id, sex]);
+
+        res.json({
+            resp: true,
+            msg : 'User has update successfully: sex =  '+ sex,
+            person: person[0] 
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
+export const updateDateOfBirth = async (req, res = response) => {
+    try {
+        const { dateOfBirth } = req.body;
+
+        const person = await pool.query(`CALL SP_USERS_UPDATE_DATE_OF_BIRTH(?,?);`, [req.params.id, dateOfBirth]);
+
+        res.json({
+            resp: true,
+            msg : 'User has update successfully: dateOfBirth = '+ dateOfBirth,
+            person: person[0] 
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
+export const updateWork = async (req, res = response) => {
+    try {
+        const { work } = req.body;
+
+        const person = await pool.query(`CALL SP_USERS_UPDATE_WORK?,?);`, [req.params.id, work]);
+
+        res.json({
+            resp: true,
+            msg : 'User has update successfully: work = '+ work,
+            person: person[0] 
+        });
+
+        
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg : e
+        });
+    }
+
+}
+
 export const getUsersById = async (req, res = response) => {
     try {
 
@@ -120,7 +186,7 @@ export const putUsersById = async (req, res = response) => {
 
         const { firstName, lastName, phone } = req.body;
 
-        pool.query(`CALL SP_UPDATE_PROFILE(?,?,?,?);`, [req.uid, firstName, lastName, phone]);
+        pool.query(`CALL SP_UPDATE_PROFILE(?,?,?,?);`, [req.params.id, firstName, lastName, phone]);
 
         res.json({
             resp: true,

@@ -34,8 +34,8 @@ const router = Router();
  *           description: Login success.
  *                      
  */
-router.post('/login-email', auth.loginController);
-router.post('/login-phone', auth.loginWithPhoneController);
+router.post('/login-email', logRequest,auth.loginController);
+router.post('/login-phone', logRequest,auth.loginWithPhoneController);
 router.get('/renew-token-login', [verifyToken,logRequest], auth.renewTokenLogin);
 
 

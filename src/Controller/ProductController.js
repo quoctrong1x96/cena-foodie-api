@@ -32,7 +32,8 @@ export const updateProduct = async (req, res = response) => {
 
         const {name, description, price, category } = req.body;
         
-        const rows = await pool.query('Update products set nameProduct = ? , description = ?, price = ?, category_id = ? where  id = ?', [name, description, price, category, req.params.idProduct]);
+        const rows = await pool.query('Update products set nameProduct = ? , description = ?, price = ?, category_id = ? where  id = ? and store_id = ?',
+        [name, description, price, category, req.params.idProduct, req.params.id]);
         
         if(req.files && req.files.length> 0){
             pool.query('DELETE imageProduct WHERE product_id = ?)', [ product_id]);
@@ -63,7 +64,7 @@ export const getProductsTopHome = async (req, res = response) => {
         res.json({
             resp: true,
             msg : 'All products of store: '+ store_id,
-            productsDb: productsDb[0] 
+            data: productsDb[0] 
         });
 
         
@@ -83,7 +84,7 @@ export const getImagesProducts = async ( req, res = response ) => {
         res.json({
             resp: true,
             msg : 'Get Images Products',
-            imageProductDb: imageProductDb
+            data: imageProductDb
         });
         
     } catch (e) {
@@ -185,7 +186,7 @@ export const deleteProduct = async (req, res = response ) => {
     try {
 
         await pool.query('DELETE FROM imageProduct WHERE product_id = ?', [ req.params.idProduct ]);
-        await pool.query('DELETE FROM products WHERE id = ?', [ req.params.idProduct ]);
+        await pool.query('DELETE FROM products WHERE id = ?  and store_id = ?', [ req.params.idProduct, req.params.id ]);
 
         res.json({
             resp: true,

@@ -78,7 +78,6 @@ export const getDetailsOrderById = async (req, res = response) => {
     }
 
 }
-
 export const updateStatusToDispatched = async (req, res = response) => {
 
     try {
@@ -90,6 +89,28 @@ export const updateStatusToDispatched = async (req, res = response) => {
         res.json({
             resp: true,
             msg: 'Order DISPATCHED'
+        });
+
+    } catch (e) {
+        return res.status(500).json({
+            resp: false,
+            msg: e
+        });
+    }
+
+}
+
+export const updateStatusToCancelled= async (req, res = response) => {
+
+    try {
+
+        const { idDelivery, store_id, store_latitude, store_longitude } = req.body;
+
+        await pool.query('UPDATE orders SET status = ?, delivery_id = ?, store_id = ?, store_latitude = ?, store_longitude = ? WHERE id = ?', ['CANCELLED', idDelivery, store_id, store_latitude, store_longitude, req.params.idOrder]);
+
+        res.json({
+            resp: true,
+            msg: 'Order CANCELLED'
         });
 
     } catch (e) {

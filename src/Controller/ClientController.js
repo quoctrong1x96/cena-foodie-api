@@ -11,7 +11,7 @@ export const getListOrdersForClient = async (req, res = response) => {
         res.json({
             resp: true,
             msg : 'List orders for client by ' + req.params.statusOrder,
-            ordersClient: listDb[0]
+            data: listDb[0]
         });
         
     } catch (e) {

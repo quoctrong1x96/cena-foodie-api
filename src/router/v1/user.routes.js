@@ -18,6 +18,9 @@ router.put('/:id/image-profile', [verifyToken,logRequest, upLoadsProfile.single(
 router.put('/:id/notification-token', [verifyToken,logRequest], user.updateNotificationToken );
 router.patch('/:id/last-name', [verifyToken,logRequest], user.updateLastName);
 router.patch('/:id/first-name', [verifyToken,logRequest], user.updateFirstName);
+router.patch('/:id/sex', [verifyToken,logRequest], user.updateSex);
+router.patch('/:id/date-of-birth', [verifyToken,logRequest], user.updateDateOfBirth);
+router.patch('/:id/work', [verifyToken,logRequest], user.updateWork);
 router.patch('/:id/reference', [verifyToken,logRequest], user.enterReferenceCode);
 
 router.get('/:id/addresses', [verifyToken,logRequest], user.getAddressesUser );
