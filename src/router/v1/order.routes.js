@@ -10,6 +10,7 @@ const router = Router();
 
 router.post('/', [verifyToken,logRequest], orders.addNewOrders );
 router.get('/', [verifyToken,logRequest], orders.getOrdersByStatus );
+router.get('/client', [verifyToken,logRequest], orders.getOrdersByStatusForClient );
 router.get('/:idOrder/details', [verifyToken,logRequest], orders.getDetailsOrderById );
 router.get('/deliveries/:idDelivery', [verifyToken,logRequest], orders.getOrdersByDelivery );
 router.put('/:idOrder/to-on-way', [verifyToken,logRequest], orders.updateStatusToOnTheWay );

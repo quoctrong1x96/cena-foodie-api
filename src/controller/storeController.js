@@ -7,19 +7,17 @@ import bcrypt from 'bcrypt';
 export const getStoreNameById = async (req, res = response) => {
 
     try {
-        const stores = await pool.query(`SELECT store_name  FROM stores where id = ?`, req.params.id);
+        const name = await pool.query(`SELECT name  FROM stores where id = ?`, req.params.id);
 
-        res.json({
-            resp: true,
-            msg : 'Store id = '+ req.params.storeId,
-            stores_name: stores 
+        res.status(200).json({
+            stores_name: name
         });
 
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -29,17 +27,15 @@ export const getStoreById = async (req, res = response) => {
     try {
         const stores = await pool.query(`SELECT *   FROM stores where id = ?`, req.params.id);
 
-        res.json({
-            resp: true,
-            msg : 'Store id = '+ req.params.storeId,
-            data: stores 
+        res.status(200).json({
+            stores: stores
         });
 
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -47,58 +43,54 @@ export const getStoreById = async (req, res = response) => {
 
 export const getStoresPerPage = async (req, res = response) => {
     try {
-        let offset =  req.query.offset;
-        
-        let limit =  req.query.limit;
-        let lng =  req.query.lng;
-        let lat =  req.query.lat;
-        if(offset == null){
+        let offset = req.query.offset;
+
+        let limit = req.query.limit;
+        let lng = req.query.lng;
+        let lat = req.query.lat;
+        if (offset == null) {
             offset = 0;
         }
-        if(limit == null){
-            limit = 100; 
+        if (limit == null) {
+            limit = 100;
         }
 
-        if(lng == null || lat == null){
+        if (lng == null || lat == null) {
             return res.status(404).json({
                 resp: false,
-                msg : "This location not found!"
+                message: "This location not found!"
             });
         }
-       
-        const stores = await pool.query(`CALL SP_GET_STORES_NEXT_LOCATION_BY_PAGE(?,?,?,?);`,[lat, lng, limit, offset]);
 
-        res.json({
-            resp: true,
-            msg : 'Stores near you by limit '+ limit + ', offset '+ offset,
-            stores: stores[0] 
+        const stores = await pool.query(`CALL SP_GET_STORES_NEXT_LOCATION_BY_PAGE(?,?,?,?);`, [lat, lng, limit, offset]);
+
+        res.status(200).json({
+            stores: stores[0]
         });
 
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
 }
 
-export const getAllDelivery = async ( req, res = response ) => {
+export const getAllDelivery = async (req, res = response) => {
     try {
 
-        let deliveryDb = await pool.query(`CALL SP_STORES_DELIVERIES(?);`, [req.params.id]);
+        const deliveryDb = await pool.query(`CALL SP_STORES_DELIVERIES(?);`, [req.params.id]);
 
-        res.json({
-            resp: true,
-            msg : 'Get All Delivery',
-            data: deliveryDb[0] 
+        res.status(200).json({
+            deliveries: deliveryDb[0]
         });
-        
+
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -107,32 +99,32 @@ export const getAllDelivery = async ( req, res = response ) => {
 export const registerDelivery = async (req, res = response) => {
     try {
 
-        const { firstName, lastName, phone, email, password, notificationToken } = req.body;
+        const { first_name, last_name, phone, email, password, notification_token } = req.body;
         const imagePath = req.file.filename;
 
         const validatedEmail = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
-        
+
         if (validatedEmail.length > 0) {
-            return res.status(401).json({
+            return res.status(409).json({
                 resp: false,
-                msg: 'Email already exists'
+                message: 'Email already exists'
             });
         }
 
         let salt = bcrypt.genSaltSync();
         const pass = bcrypt.hashSync(password, salt);
-        pool.query(`CALL SP_USERS_REGISTER(?,?,?,?,?,?,?,?);`, [firstName, lastName, phone, imagePath, email, pass, 3, notificationToken]);
+        pool.query(`CALL SP_USERS_REGISTER(?,?,?,?,?,?,?,?);`, [first_name, last_name, phone, imagePath, email, pass, 3, notification_token]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg: 'Delivery successfully registered',
+            message: 'Delivery successfully registered',
         });
 
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg: e
+            message: e
         });
     }
 }
@@ -147,34 +139,34 @@ export const updateStoreImage = async (req, res = response) => {
 
         pool.query('UPDATE stores SET image = ? WHERE id = ?', [imagePath, req.params.id]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg: 'Picture changed'
+            message: 'Picture changed'
         });
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg: e
+            message: e
         });
     }
 }
 
 export const updateStoreTime = async (req, res = response) => {
     try {
-        const {openTime,closeTime} = req.body
+        const { open_time, close_time } = req.body
 
-        pool.query('UPDATE stores SET open_time = ?, close_time = ? WHERE id = ?', [openTime, closeTime, req.params.id]);
+        pool.query('UPDATE stores SET open_time = ?, close_time = ? WHERE id = ?', [open_time, close_time, req.params.id]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg: 'Store time changed'
+            message: 'Store time changed'
         });
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg: e
+            message: e
         });
     }
 }

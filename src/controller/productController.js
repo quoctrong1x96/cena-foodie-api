@@ -13,15 +13,15 @@ export const addNewProduct = async (req, res = response) => {
             pool.query('INSERT INTO imageProduct (picture, product_id) value (?,?)', [ image.filename, rows.insertId ]);
         });
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg : 'Product added Successfully'
+            message: 'Product added Successfully'
         });
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -42,15 +42,15 @@ export const updateProduct = async (req, res = response) => {
             });
         }
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg : 'Product update Successfully'
+            message: 'Product update Successfully'
         });
 
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -61,17 +61,15 @@ export const getProductsTopHome = async (req, res = response) => {
         let store_id = req.params.id;
         const productsDb = await pool.query(`CALL SP_STORES_ALL_PRODUCTS(?);`,[store_id]);
 
-        res.json({
-            resp: true,
-            msg : 'All products of store: '+ store_id,
-            data: productsDb[0] 
+        res.status(200).json({
+            products: productsDb[0] 
         });
 
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 }
@@ -81,16 +79,14 @@ export const getImagesProducts = async ( req, res = response ) => {
 
         const imageProductDb = await pool.query('SELECT * FROM imageProduct WHERE product_id = ? and store_id = ?', [ req.params.idProduct, req.params.id ]);
 
-        res.json({
-            resp: true,
-            msg : 'Get Images Products',
-            data: imageProductDb
+        res.status(200).json({
+            images: imageProductDb
         });
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -102,16 +98,14 @@ export const searchProductForName = async (req, res = response) => {
 
         const productDb = await pool.query(`CALL SP_SEARCH_PRODUCT(?);`, [ req.params.nameProduct ]);
 
-        res.json({
-            resp: true,
-            msg : 'Search products',
-            productsDb: productDb[0]
+        res.status(200).json({
+            products: productDb[0]
         });
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -123,16 +117,14 @@ export const searchProductsForCategory = async (req, res = response) => {
 
         const productDb = await pool.query(`CALL SP_SEARCH_FOR_CATEGORY(?);`, [req.params.idCategory]);
 
-        res.json({
-            resp: true,
-            msg : 'list Products for id Category',
-            productsDb : productDb[0]
+        res.status(200).json({
+            products : productDb[0]
         });
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -142,19 +134,17 @@ export const listProductsAdmin = async (req, res = response) => {
 
     try {
 
-        const productsDb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN(?);`, req.uid);
+        const productsDb = await pool.query(`CALL SP_LIST_PRODUCTS_ADMIN(?);`, req.id);
 
-        res.json({
-            resp: true,
-            msg : 'Top 10 Products',
-            productsDb: productsDb[0] 
+        res.status(200).json({
+            products: productsDb[0] 
         });
 
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 }
@@ -167,15 +157,15 @@ export const updateStatusProduct = async (req, res = response) => {
 
         await pool.query('UPDATE products SET status = ? WHERE id = ?', [ parseInt(status), parseInt(req.params.idProduct) ]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg : 'Product updated'
+            message: 'Product updated'
         });
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 
@@ -188,15 +178,15 @@ export const deleteProduct = async (req, res = response ) => {
         await pool.query('DELETE FROM imageProduct WHERE product_id = ?', [ req.params.idProduct ]);
         await pool.query('DELETE FROM products WHERE id = ?  and store_id = ?', [ req.params.idProduct, req.params.id ]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg : 'Product deleted successfully'
+            message: 'Product deleted successfully'
         });
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e
+            message: e
         });
     }
 

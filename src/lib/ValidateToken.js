@@ -7,22 +7,22 @@ export default ValidatedToken = ( req, res, next ) => {
     if( !token ){
         return res.status(401).json({
             resp: false,
-            msg : 'There is not Token in the request'
+            message: 'There is not Token in the request'
         });
     }
 
     try {
         
-        const { uidPerson } = jwt.verify( token, process.env.APP_KEY_JWT );
+        const { idPerson } = jwt.verify( token, process.env.APP_KEY_JWT );
 
-        req.uidPerson = uidPerson;
+        req.idPerson = idPerson;
 
         next();
 
     } catch (err) {
-        return res.status(401).json({
+        return res.status(500).json({
             resp: false,
-            msg : err
+            message: err
         });
     }
 

@@ -10,21 +10,21 @@ export const verifyToken = ( req, res, next ) => {
         if( !token ){
             return res.status(401).json({
                 resp: false,
-                msg : 'There is not Token in the request'
+                message: 'There is not Token in the request'
             });
         }
 
-        const { uidPerson } = jwt.verify( token, process.env.APP_KEY_JWT );
+        const { idPerson } = jwt.verify( token, process.env.APP_KEY_JWT );
 
-        req.uid = uidPerson;
+        req.id = idPerson;
 
         next();
         
     } catch (e) {
         return res.status(500).json({
             resp: false,
-            msg : e,
-            user: { uid: 0, firstName: '', lastName: '', image: '', email: '', rol_id: 0 },
+            message: e,
+            user: { id: 0, first_name: '', last_name: '', image: '', email: '', rol_id: 0 },
             token: ''
         });
     }

@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 
-export const generateJsonWebToken = ( uidPerson ) => {
+export const generateJsonWebToken = ( idPerson ) => {
 
     return new Promise(( resolve, reject ) => {
 
-        const payload = { uidPerson };
+        const payload = { idPerson };
 
         jwt.sign( payload, process.env.APP_KEY_JWT, {
             expiresIn: '12h'
