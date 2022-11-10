@@ -8,9 +8,9 @@ export const logRequest = ( req, res, next ) => {
         next();
 
     } catch (err) {
-        return res.status(503).json({
+        return res.status(500).json({
             resp: false,
-            msg : err
+            message: err
         });
     }
 }

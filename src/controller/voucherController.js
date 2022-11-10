@@ -9,15 +9,15 @@ export const createVoucher = async (req, res = response) => {
     try {
         await pool.query(`CALL SP_STORES_ADD_VOUCHER(?,?,?,?,?,?,?,?,?,?,?,?,?,?);`, [name, description, start_date, end_date, id_voucher_type, code, image_panner, image_avatar, id_type_discount, min_orders, used_time, value_discount, max_discount, list_apply]);
 
-        res.json({
+        res.status(200).json({
             resp: true,
-            msg: 'Create voucher successful',
+            message: 'Create voucher successful',
         });
 
     } catch (err) {
         return res.status(500).json({
             resp: false,
-            msg: err
+            message: err
         });
     }
 }
@@ -64,16 +64,14 @@ export const getVoucherByStoreId = async (req, res = response) => {
         //     });
         // }
 
-        res.json({
-            resp: true,
-            msg: 'Get voucher by store_id = ' + store_id,
-            data: voucherDb[0]
+        res.status(200).json({
+            vouchers: voucherDb[0]
         });
 
     } catch (err) {
         return res.status(500).json({
             resp: false,
-            msg: err
+            message: err
         });
     }
 }
@@ -85,16 +83,14 @@ export const getVoucherByProductId = async (req, res = response) => {
     try {
         const voucherDb = await pool.query(`CALL SP_GET_VOCHER_BY_PRODUCT_ID(?);`, [product_id]);
 
-        res.json({
-            resp: true,
-            msg: 'Get voucher by product_id = ' + product_id,
-            productsDb: voucherDb[0]
+        res.status(200).json({
+            vouchers: voucherDb[0]
         });
 
     } catch (err) {
         return res.status(500).json({
             resp: false,
-            msg: err
+            message: err
         });
     }
 }
@@ -104,16 +100,14 @@ export const getSystemVoucher = async (req, res = response) => {
     try {
         const voucherDb = await pool.query(`CALL SP_GET_SYSTEM_VOCHER();`);
 
-        res.json({
-            resp: true,
-            msg: 'Get all System voucher= ',
-            productsDb: voucherDb[0]
+        res.status(200).json({
+            vouchers: voucherDb[0]
         });
 
     } catch (err) {
         return res.status(500).json({
             resp: false,
-            msg: err
+            message: err
         });
     }
 }
