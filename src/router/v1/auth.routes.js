@@ -7,14 +7,14 @@ import { logRequest } from '../../middleware/logUri.js';
 const router = Router();
 
 /**
- * @swagger
+
  * tags:
  *  name: Authentication
  *  description: Api to login with email address
  */
 
 /**
- * @swagger
+
  * /auth/login-email:
  *  post:
  *      summary: Login with email
@@ -35,6 +35,22 @@ const router = Router();
  *                      
  */
 router.post('/login-email', logRequest,auth.loginController);
+
+/**
+
+*  /auth/login-phone:
+*    post:
+*      summary: Login with phone number
+*      tags: [Authentication]
+*      requestBody:
+*        content:
+*          application/json:     # Media type
+*            schema:             # Request body contents
+*              $ref: '#/components/schemas/Todo'   # Reference to an object
+*      responses:
+*        '200':
+*          description: OK                 
+*/
 router.post('/login-phone', logRequest,auth.loginWithPhoneController);
 router.get('/renew-token-login', [verifyToken,logRequest], auth.renewTokenLogin);
 

@@ -14,6 +14,8 @@ import routerProduct from './router/v1/product.routes.js';
 import routerOrder from './router/v1/order.routes.js';
 import routerStore from './router/v1/store.routes.js';
 import routerDashboard from './router/v1/dashboard.routes.js';
+import setupSwagger from './swagger-setup.js'; 
+
 
 config();
 const __filename = fileURLToPath(import.meta.url);
@@ -30,16 +32,13 @@ socketOrderDelivery(io);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// setupSwagger(app);
-
-
+setupSwagger(app);
 
 app.use('/api/v1/auth', routeAuth);
 app.use('/api/v1/users', routerUser);
 app.use('/api/v1/stores', routerStore);
 app.use('/api/v1/orders', routerOrder);
 app.use('/api/v1/products', routerProduct);
-
 app.use('/api/v1/dashboard', routerDashboard);
 
 
