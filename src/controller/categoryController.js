@@ -43,11 +43,8 @@ export const updateCategories = async (req, res = response) => {
 
 export const getAllCategories = async ( req, res = response ) => {
 
-    const store_id = req.header('store_id');
-
     try {
-
-        const category = await pool.query(`SELECT * FROM categories WHERE store_id = ? OR store_id = 0`, store_id);
+        const category = await pool.query(`SELECT * FROM categories WHERE store_id = ? OR store_id = 0`,  req.params.id);
 
         res.status(200).json({
             categories: category

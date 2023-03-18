@@ -28,7 +28,7 @@ export const getStoreById = async (req, res = response) => {
         const stores = await pool.query(`SELECT *   FROM stores where id = ?`, req.params.id);
 
         res.status(200).json({
-            stores: stores
+            stores: stores[0]
         });
 
 

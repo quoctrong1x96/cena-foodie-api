@@ -34,6 +34,7 @@ router.delete('/:id/products/:idProduct/vouchers', [verifyToken,logRequest], vou
 router.post('/:id/categories', [verifyToken,logRequest], category.addCategories);
 router.delete('/:id/categories/:idCategory', [verifyToken,logRequest], category.deleteCategories);
 router.get('/:id/categories', [verifyToken,logRequest], category.getCategoriesByStore);
+router.get('/:id/categories/all', [verifyToken,logRequest], category.getAllCategories);
 router.put('/:id/categories/:idCategory', [verifyToken,logRequest], category.updateCategories);
 
 router.post('/:id/vouchers',[verifyToken,logRequest], voucher.createVoucher);
