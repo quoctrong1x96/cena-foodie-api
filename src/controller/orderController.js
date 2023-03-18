@@ -31,19 +31,29 @@ export const getOrdersByStatus = async (req, res = response) => {
 
     try {
         let status = req.query.status;
-        let storeId = req.query.store;
-        if ((typeof status != undefined) && (status) && (typeof storeId != undefined) && (storeId) ) {
+        let id = req.query.store;
+        let type = req.query.type;
+        if ((typeof type != undefined) && (type == "delivery")) {
+            const ordersDb = await pool.query(`CALL SP_ORDERS_BY_DELIVERY(?,?);`, [id, status]);
 
-            const ordersDb = await pool.query(`CALL SP_ORDERS_BY_STATUS(?,?);`, [status, storeId]);
+                res.status(200).json({
+                    orders: ordersDb[0]
+                });
+        }
+        else {
+            if ((typeof status != undefined) && (status) && (typeof id != undefined) && (id)) {
 
-            res.status(200).json({
-                orders: ordersDb[0]
-            });
-        } else {
-            return res.status(403).json({
-                resp: false,
-                message: "Forbidden to get all orders!"
-            });
+                const ordersDb = await pool.query(`CALL SP_ORDERS_BY_STATUS(?,?);`, [status, id]);
+
+                res.status(200).json({
+                    orders: ordersDb[0]
+                });
+            } else {
+                return res.status(403).json({
+                    resp: false,
+                    message: "Forbidden to get all orders!"
+                });
+            }
         }
     } catch (e) {
         return res.status(500).json({
@@ -59,7 +69,7 @@ export const getOrdersByStatusForClient = async (req, res = response) => {
     try {
         let status = req.query.status;
         let client = req.query.object_id;
-        if ((typeof status != undefined) && (status) && ((typeof client != undefined) && (client) )) {
+        if ((typeof status != undefined) && (status) && ((typeof client != undefined) && (client))) {
 
             const ordersDb = await pool.query(`CALL SP_ORDERS_BY_STATUS_FOR_CLIENT(?,?);`, [status, client]);
 
@@ -121,7 +131,7 @@ export const updateStatusToDispatched = async (req, res = response) => {
 
 }
 
-export const updateStatusToCancelled= async (req, res = response) => {
+export const updateStatusToCancelled = async (req, res = response) => {
 
     try {
 
