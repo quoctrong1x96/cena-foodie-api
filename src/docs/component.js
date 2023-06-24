@@ -5,7 +5,7 @@ export default {
       properties: {
         phone: {
           type: "string",
-          description: "0949412112",
+          example: "0949412112",
         }
       }
     },

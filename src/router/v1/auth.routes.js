@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { verifyToken } from '../../middleware/validateToken.js';
+import { authJwt } from '../../middleware/validateToken.js';
 import * as auth from '../../controller/authController.js';
 
 import { logRequest } from '../../middleware/logUri.js';
@@ -52,7 +52,7 @@ router.post('/login-email', logRequest,auth.loginController);
 *          description: OK                 
 */
 router.post('/login-phone', logRequest,auth.loginWithPhoneController);
-router.get('/renew-token-login', [verifyToken,logRequest], auth.renewTokenLogin);
+router.get('/renew-token-login', [authJwt.verifyToken,logRequest], auth.renewTokenLogin);
 
 
 export default router;
