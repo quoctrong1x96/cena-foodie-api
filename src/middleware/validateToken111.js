@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   try {
     let token = req.header("xx-token");
 
@@ -33,7 +33,7 @@ verifyToken = (req, res, next) => {
   }
 };
 
-isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
       for (let i = 0; i < roles.lenth; i++) {
@@ -51,7 +51,7 @@ isAdmin = (req, res, next) => {
   });
 };
 
-isModeratorOrAdmin = (req, res, next) => {
+const isModeratorOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
       for (let i = 0; i < roles.length; i++) {
@@ -73,11 +73,9 @@ isModeratorOrAdmin = (req, res, next) => {
   });
 };
 
-const authJwt = {
+export const authJwt = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
-  isModerator: isModerator,
+  // isModerator: isModerator,
   isModeratorOrAdmin: isModeratorOrAdmin,
 };
-
-export default authJwt;
