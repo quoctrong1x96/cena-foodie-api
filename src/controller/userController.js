@@ -1,6 +1,6 @@
 import { response } from 'express';
 import bcrypt from 'bcrypt';
-import pool from '../Database/mysql.js';
+import pool from '../database/mysql.js';
 import fs from 'fs-extra';
 import path from 'path';
 
