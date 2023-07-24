@@ -1,6 +1,6 @@
 // get-all-store-by-page
 import { response } from 'express';
-import pool from '../Database/mysql.js';
+import pool from '../database/mysql.js';
 import bcrypt from 'bcrypt';
 
 

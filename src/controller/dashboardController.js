@@ -6,7 +6,7 @@
 // X = 5: Thống kê 10 người mua hàng cao nhất
 
 import { response } from 'express';
-import pool from '../Database/mysql.js';
+import pool from '../database/mysql.js';
 
 export const getDashboardByStatus = async (req, res = response) => {
     try {
