@@ -247,7 +247,7 @@ export const changeImageProfile = async (req, res = response) => {
 
         const imageDb = await pool.query('SELECT image FROM persons WHERE id = ?', [req.params.id]);
 
-        await fs.unlink(path.resolve('src/Uploads/Profile/' + imageDb[0].image));
+        await fs.unlink(path.resolve('src/uploads/profile/' + imageDb[0].image));
 
         pool.query('UPDATE persons SET image = ? WHERE id = ?', [imagePath, req.params.id]);
 
