@@ -58,7 +58,6 @@ export const loginController = async (req, res = response) => {
 export const loginWithPhoneController = async (req, res = response) => {
 
     try {
-
         const { phone } = req.body;
 
         const validatedPhone = await pool.query('SELECT phone FROM persons WHERE phone = ?', [phone]);
@@ -69,7 +68,6 @@ export const loginWithPhoneController = async (req, res = response) => {
                 message: 'Phone not exist'
             });
         }
-
         const userDb = await pool.query(`CALL SP_AUTH_LOGIN_PHONE(?);`, [phone]);
 
         const user = userDb[0][0];
