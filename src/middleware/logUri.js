@@ -3,7 +3,7 @@ export const logRequest = ( req, res, next ) => {
         let method = req.method;
         let url = req.originalUrl;
         let time = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-        console.log("TIME: "+time+", METHOD: "+method+", API: "+url);
+        console.log("TIME: "+time+", METHOD: "+method+", API: .."+url);
 
         next();
 
